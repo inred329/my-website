@@ -1,10 +1,148 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
-    <title>我的 GitHub Pages 網站</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>楊舜博｜教育科技 × AI 應用 × 工程教學</title>
+  <meta name="description" content="我是楊舜博，專注於教育科技與人工智慧應用，致力於將創新技術融入教學，提升學習互動與實踐能力。我擅長設計結合 AI 的課程，並推廣工程教育與數位學習。" />
+  <meta name="author" content="楊舜博" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="楊舜博｜教育科技 × AI 應用 × 工程教學" />
+  <meta property="og:description" content="我是楊舜博，專注於教育科技與人工智慧應用，致力於將創新技術融入教學，提升學習互動與實踐能力。我擅長設計結合 AI 的課程，並推廣工程教育與數位學習。" />
+  <!-- 若要最佳化社群分享，建議之後新增 og:image 指向 1200x630 的縮圖 -->
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --card: #f8fafc;
+      --accent: #0ea5e9;
+      --ring: rgba(14,165,233,.25);
+      --shadow: 0 10px 30px rgba(2, 6, 23, 0.08);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1220;
+        --text: #e2e8f0;
+        --muted: #94a3b8;
+        --card: #0f172a;
+        --accent: #38bdf8;
+        --ring: rgba(56,189,248,.25);
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; padding: 0; background: var(--bg); color: var(--text);
+      font-family: 'Noto Sans TC', system-ui, -apple-system, 'Segoe UI', Roboto, 'Microsoft JhengHei', Arial, sans-serif;
+      line-height: 1.7;
+    }
+    .container { max-width: 960px; margin: 0 auto; padding: 24px; }
+    header { display: grid; grid-template-columns: 120px 1fr; gap: 24px; align-items: center; padding: 32px 0; }
+    .avatar {
+      width: 120px; height: 120px; border-radius: 50%; overflow: hidden;
+      box-shadow: var(--shadow); border: 3px solid rgba(14,165,233,.3);
+    }
+    .name { font-size: 28px; font-weight: 800; letter-spacing: .02em; }
+    .tagline { color: var(--muted); margin-top: 4px; }
+    .card { background: var(--card); border: 1px solid rgba(148,163,184,.2); border-radius: 16px; box-shadow: var(--shadow); padding: 20px; }
+    section { margin: 18px 0 26px; }
+    h2 { font-size: 20px; margin: 0 0 8px; }
+    .muted { color: var(--muted); }
+    .actions a {
+      display: inline-block; margin-right: 12px; padding: 8px 12px; border-radius: 10px;
+      background: var(--accent); color: #fff; text-decoration: none; box-shadow: var(--shadow);
+    }
+    footer { margin-top: 28px; padding: 24px 0; color: var(--muted); font-size: 14px; border-top: 1px dashed rgba(148,163,184,.3); }
+    @media (max-width: 640px) {
+      header { grid-template-columns: 1fr; text-align: center; }
+      .avatar { margin: 0 auto; }
+    }
+  </style>
+
+  <!-- 結構化資料（SEO） -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "楊舜博",
+    "description": "我是楊舜博，專注於教育科技與人工智慧應用，致力於將創新技術融入教學，提升學習互動與實踐能力。我擅長設計結合 AI 的課程，並推廣工程教育與數位學習。",
+    "jobTitle": "教育科技 / AI 應用 / 工程教育",
+    "url": ""
+  }
+  </script>
 </head>
 <body>
-    <h1>Hello GitHub Pages!</h1>
-    <p>這是我的第一個 GitHub Pages 網站。</p>
-</body>
-</html>
+  <div class="container">
+    <header>
+      <!-- 內嵌 SVG 卡通頭像（免外部圖片） -->
+      <div class="avatar" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 512 512">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stop-color="#8b5cf6"/>
+              <stop offset="100%" stop-color="#06b6d4"/>
+            </linearGradient>
+            <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.25"/>
+            </filter>
+          </defs>
+          <circle cx="256" cy="256" r="230" fill="url(#g)" filter="url(#shadow)" />
+          <!-- face -->
+          <circle cx="256" cy="240" r="150" fill="#ffe8c8" opacity="0.95" />
+          <!-- hair -->
+          <path d="M126,210 Q256,90 386,210 L386,190 Q256,70 126,190 Z" fill="#2a2a2a"/>
+          <!-- eyes -->
+          <circle cx="206" cy="240" r="14" fill="#1f2937"/>
+          <circle cx="306" cy="240" r="14" fill="#1f2937"/>
+          <!-- smile -->
+          <path d="M190,300 Q256,350 322,300" fill="none" stroke="#1f2937" stroke-width="10" stroke-linecap="round"/>
+          <!-- shirt -->
+          <rect x="140" y="340" width="232" height="120" rx="24" fill="#0ea5e9"/>
+          <text x="256" y="410" text-anchor="middle" font-family="'Noto Sans TC', 'Microsoft JhengHei', sans-serif" font-size="28" fill="#ffffff">舜博</text>
+        </svg>
+      </div>
+
+      <div>
+        <div class="name">楊舜博</div>
+        <div class="tagline">專注於教育科技與 AI 應用的工程教育者</div>
+        <div class="actions" style="margin-top:12px">
+          <!-- 可在此加入你的社群連結，例如：
+          mailto:your@emailEmail</a>
+          https://github.com/yournameGitHub</a>
+          https://www.linkedin.com/in/yournameLinkedIn</a>
+          -->
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="card">
+        <h2>關於我</h2>
+        <p class="muted" style="margin-top:0">
+          我是楊舜博，專注於教育科技與人工智慧應用，致力於將創新技術融入教學，提升學習互動與實踐能力。我擅長設計結合 AI 的課程，並推廣工程教育與數位學習。
+        </p>
+        <p style="margin-top:8px">
+          楊舜博致力於推動教育與科技的融合，專注於人工智慧、軟體開發與工程教育的應用。他擅長設計結合 AI 技術的教學計畫，並將 RESTful API、Teachable Machine 等主題融入課程，讓學習者能夠在實作中掌握核心技能。除了技術教學，他也關注後設認知與學習策略，期望透過創新教學方法，培養學生的問題解決能力與創新思維。楊舜博相信，教育不僅是知識傳遞，更是啟發與實踐的過程，因此積極探索互動式與實驗性的學習體驗，讓科技成為學習的最佳助力。
+        </p>
+      </section>
+
+      <!-- 如需作品集，可啟用以下範例區塊
+      <section class="card">
+        <h2>代表作品</h2>
+        <ul>
+          <li><strong>RESTful API 兩小時課程：</strong>投影片／教材連結</li>
+          <li><strong>Teachable Machine 攝影機即時辨識：</strong>Demo 或 GitHub 連結</li>
+          <li><strong>後設認知與領導：</strong>論文摘要／PDF／投影片</li>
+        </ul>
+      </section>
+      -->
+
+      <!-- 如需聯絡表單或公開 email，可在此新增
+      <section class="card">
+        <h2>聯絡我</h2>
+        <p>歡迎透過 Email 或社群平台與我交流。</p>
+      </section>
+      -->
