@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>歡迎來到多項式樂園！</title>
+    <!-- 為了讓數學符號更漂亮，加入了MathJax工具 -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <!-- **更新 MathJax 設定** -->
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          },
+          startup: {
+            ready: () => {
+              console.log('MathJax is ready!');
+              MathJax.startup.defaultReady();
+              // 確保 MathJax 準備好後再產生初始題目
+              generateQuiz1();
+              generateQuiz2();
+              generateQuiz3();
+            }
+          }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff; /* 淡藍色背景，感覺很舒服 */
+            color: #333;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px 0;
+        }
+        header {
+            background: #50b3a2;
+            color: #ffffff;
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: #077187 4px solid;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        section {
+            background: #ffffff;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #077187;
+        }
+        .polynomial-example {
+            background: #e6f7ff;
+            border-left: 5px solid #1890ff;
+            padding: 10px;
+            margin: 15px 0;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .quiz-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fffbe6;
+            border: 2px dashed #fadb14;
+            border-radius: 8px;
+        }
+        .quiz-question {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            word-wrap: break-word;
+        }
+        input[type="number"] {
+            width: 60px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        button {
+            background: #50b3a2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color: 0.3s;
+        }
+        button:hover {
+            background: #077187;
+        }
+        .button-group {
+            margin-top: 15px;
+        }
+        .button-group button {
+            margin-right: 10px;
+        }
+        .btn-secondary {
+            background-color: #78909c;
+        }
+        .btn-secondary:hover {
+            background-color: #546e7a;
+        }
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .correct {
+            color: #237804;
+            background-color: #f6ffed;
+            border: 1px solid #b7eb8f;
+        }
+        .incorrect {
+            color: #a8071a;
+            background-color: #fff1f0;
+            border: 1px solid #ffccc7;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1>歡迎來到多項式樂園！</h1>
+            <p>別害怕，數學可以很有趣！</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <section>
+            <h2>🤔 什麼是多項式？</h2>
+            <p>嘿！你聽過「多項式」嗎？聽起來好像很複雜，但其實它就像是數學世界裡的樂高積木！</p>
+            <p>它是由數字（我們稱為<strong>係數</strong>）和一些未知數（通常用 $x$ 表示）組合而成的。這些 $x$ 還會有自己的次方，像是 $x^2$ (x的二次方)、$x^3$ (x的三次方) 等等。</p>
+            <p>一個多項式就是把這些「積木」用加號或減號連接起來的樣子。</p>
+            
+            <div class="polynomial-example">
+                例如：$3x^2 + 5x - 7$
+            </div>
+
+            <p>在這個例子裡：</p>
+            <ul>
+                <li>$3x^2$ 是一個<strong>項</strong>。它的<strong>係數</strong>是 3，<strong>次方</strong>是 2。</li>
+                <li>$5x$ 也是一個<strong>項</strong>。它的<strong>係數</strong>是 5，<strong>次方</strong>是 1 (通常次方為1時，我們不寫出來)。</li>
+                <li>$-7$ 叫做<strong>常數項</strong>，因為它沒有 $x$。</li>
+            </ul>
+            <p>是不是很簡單呢？就像把不同形狀的積木組合在一起一樣！</p>
+        </section>
+
+        <section>
+            <h2>➕ 多項式的加法運算</h2>
+            <p>多項式加法的唯一規則就是：<strong>相同次方的項才能互相相加！</strong> 想像一下，你只能把蘋果和蘋果放在一起，不能把蘋果和香蕉混為一談。</p>
+            <p>舉個例子，我們要計算：</p>
+            <p class="polynomial-example">$(2x^2 + 3x + 5) + (4x^2 - x + 1)$</p>
+            <p>最後，把結果組合起來，答案就是：</p>
+            <div class="polynomial-example" style="background: #d4edda; border-left-color: #28a745;">
+                $6x^2 + 2x + 6$
+            </div>
+            <p>看吧！你已經學會多項式加法了！給你一個大大的讚！👍</p>
+        </section>
+
+        <!-- 新增的減法教學區塊 -->
+        <section>
+            <h2>➖ 多項式的減法運算</h2>
+            <p>學會了加法，減法也難不倒你！減法只有一個小技巧：<strong>減去一個多項式，就等於加上它的「相反數」多項式。</strong></p>
+            <p>聽起來有點玄？其實就是把後面那個括號裡的<strong>每一個項都變號</strong>（正變負，負變正），然後再做加法就好了！</p>
+            <p>舉個例子，我們要計算：</p>
+            <p class="polynomial-example">$(5x^2 + 2x + 8) - (3x^2 - 4x + 1)$</p>
+            <p>步驟：</p>
+            <ol>
+                <li>先把後面的多項式 $(3x^2 - 4x + 1)$ 每一項都變號，變成 $(-3x^2 + 4x - 1)$。</li>
+                <li>然後題目就變成加法了：$(5x^2 + 2x + 8) + (-3x^2 + 4x - 1)$</li>
+                <li>接下來就跟加法一樣，同類項合併：$(5-3)x^2 + (2+4)x + (8-1)$</li>
+            </ol>
+            <p>最後，答案就是：</p>
+            <div class="polynomial-example" style="background: #f8d7da; border-left-color: #dc3545;">
+                $2x^2 + 6x + 7$
+            </div>
+            <p>是不是也超簡單的！你又學會一招了！😎</p>
+        </section>
+
+        <!-- 測驗一：找係數 -->
+        <div class="quiz-section">
+            <h2>小試身手 1：係數大挑戰！</h2>
+            <p>下面有一個隨機產生的多項式，請你找出每一項的係數是多少吧！</p>
+            <div id="quiz1-question" class="quiz-question"></div>
+            <div id="quiz1-inputs">
+                <p>$x^2$ 的係數是：<input type="number" id="q1_ans_x2"></p>
+                <p>$x$ 的係數是：<input type="number" id="q1_ans_x"></p>
+                <p>常數項是：<input type="number" id="q1_ans_c"></p>
+            </div>
+            <div class="button-group">
+                <button onclick="checkQuiz1()">檢查答案</button>
+                <button onclick="generateQuiz1()" class="btn-secondary">換一題</button>
+            </div>
+            <div id="quiz1-feedback" class="feedback"></div>
+        </div>
+
+        <!-- 測驗二：多項式加法 -->
+        <div class="quiz-section">
+            <h2>小試身手 2：加法魔法師！</h2>
+            <p>這裡有兩個隨機的多項式，你能算出它們相加的結果嗎？</p>
+            <div id="quiz2-question" class="quiz-question"></div>
+            <p>請輸入答案：</p>
+            <div>
+                <input type="number" id="ans_add_x2"> $x^2 +$
+                <input type="number" id="ans_add_x"> $x +$
+                <input type="number" id="ans_add_c">
+            </div>
+            <div class="button-group">
+                <button onclick="checkQuiz2()">送出答案</button>
+                <button onclick="generateQuiz2()" class="btn-secondary">換一題</button>
+            </div>
+            <div id="quiz2-feedback" class="feedback"></div>
+        </div>
+        
+        <!-- 測驗三：多項式減法 -->
+        <div class="quiz-section">
+            <h2>小試身手 3：減法魔法師！</h2>
+            <p>換你來挑戰減法看看！記得括號後面要變號喔！</p>
+            <div id="quiz3-question" class="quiz-question"></div>
+            <p>請輸入答案：</p>
+            <div>
+                <input type="number" id="ans_sub_x2"> $x^2 +$
+                <input type="number" id="ans_sub_x"> $x +$
+                <input type="number" id="ans_sub_c">
+            </div>
+            <div class="button-group">
+                <button onclick="checkQuiz3()">送出答案</button>
+                <button onclick="generateQuiz3()" class="btn-secondary">換一題</button>
+            </div>
+            <div id="quiz3-feedback" class="feedback"></div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>做得超棒的！繼續保持對數學的好奇心喔！</p>
+    </footer>
+
+    <script>
+        // --- 通用函式：產生多項式字串 ---
+        function generatePolyString(coeffs) {
+            let str = '';
+            // 處理 x^2 項
+            if (coeffs.x2 === 1) str += 'x^2 ';
+            else if (coeffs.x2 === -1) str += '-x^2 ';
+            else if (coeffs.x2 !== 0) str += `${coeffs.x2}x^2 `;
+            
+            // 處理 x 項
+            if (coeffs.x !== 0) {
+                if (str !== '' && coeffs.x > 0) str += '+ ';
+                if (coeffs.x === 1) str += `x `;
+                else if (coeffs.x === -1) str += `-x `;
+                else if (coeffs.x < 0) str += `- ${Math.abs(coeffs.x)}x `;
+                else str += `${coeffs.x}x `;
+            }
+
+            // 處理常數項
+            if (coeffs.c !== 0) {
+                if (str !== '' && coeffs.c > 0) str += '+ ';
+                if (coeffs.c < 0) str += `- ${Math.abs(coeffs.c)}`;
+                else str += `${coeffs.c}`;
+            }
+
+            if (str.trim() === '') return '0';
+            return str.trim();
+        }
+
+        // --- 測驗一的程式碼 ---
+        let coeffs1 = {};
+        function generateQuiz1() {
+            coeffs1 = {
+                x2: Math.floor(Math.random() * 19) - 9, // -9 到 9
+                x: Math.floor(Math.random() * 19) - 9,
+                c: Math.floor(Math.random() * 19) - 9
+            };
+
+            if (coeffs1.x2 === 0) coeffs1.x2 = 1; // 確保是二次多項式
+
+            const polyStr = generatePolyString(coeffs1);
+            document.getElementById('quiz1-question').innerHTML = `請問多項式 <strong>$${polyStr}$</strong> 的係數是多少呢？`;
+
+            document.getElementById('q1_ans_x2').value = '';
+            document.getElementById('q1_ans_x').value = '';
+            document.getElementById('q1_ans_c').value = '';
+            document.getElementById('quiz1-feedback').innerHTML = '';
+            document.getElementById('quiz1-feedback').className = 'feedback';
+            // 通知 MathJax 更新畫面
+            if(window.MathJax) { MathJax.typesetPromise(); }
+        }
+        function checkQuiz1() {
+            const ans_x2 = parseInt(document.getElementById('q1_ans_x2').value) || 0;
+            const ans_x = parseInt(document.getElementById('q1_ans_x').value) || 0;
+            const ans_c = parseInt(document.getElementById('q1_ans_c').value) || 0;
+            const feedbackEl = document.getElementById('quiz1-feedback');
+            if (ans_x2 === coeffs1.x2 && ans_x === coeffs1.x && ans_c === coeffs1.c) {
+                feedbackEl.innerHTML = '太厲害了！完全正確！💯';
+                feedbackEl.className = 'feedback correct';
+                setTimeout(generateQuiz1, 2000);
+            } else {
+                feedbackEl.innerHTML = '喔喔，差一點點，再檢查看看哪裡不一樣呢？🤔';
+                feedbackEl.className = 'feedback incorrect';
+            }
+        }
+
+        // --- 測驗二的程式碼 (加法) ---
+        let poly1_coeffs = {}, poly2_coeffs = {}, sum_coeffs = {};
+        function generateQuiz2() {
+            poly1_coeffs = { x2: Math.floor(Math.random() * 10) + 1, x: Math.floor(Math.random() * 21) - 10, c: Math.floor(Math.random() * 21) - 10 };
+            poly2_coeffs = { x2: Math.floor(Math.random() * 10) + 1, x: Math.floor(Math.random() * 21) - 10, c: Math.floor(Math.random() * 21) - 10 };
+            sum_coeffs = { x2: poly1_coeffs.x2 + poly2_coeffs.x2, x: poly1_coeffs.x + poly2_coeffs.x, c: poly1_coeffs.c + poly2_coeffs.c };
+            
+            const poly1Str = generatePolyString(poly1_coeffs);
+            const poly2Str = generatePolyString(poly2_coeffs);
+            document.getElementById('quiz2-question').innerHTML = `$(${poly1Str}) + (${poly2Str}) = ?$`;
+
+            document.getElementById('ans_add_x2').value = '';
+            document.getElementById('ans_add_x').value = '';
+            document.getElementById('ans_add_c').value = '';
+            document.getElementById('quiz2-feedback').innerHTML = '';
+            document.getElementById('quiz2-feedback').className = 'feedback';
+            // 通知 MathJax 更新畫面
+            if(window.MathJax) { MathJax.typesetPromise(); }
+        }
+        function checkQuiz2() {
+            const ans_x2 = parseInt(document.getElementById('ans_add_x2').value) || 0;
+            const ans_x = parseInt(document.getElementById('ans_add_x').value) || 0;
+            const ans_c = parseInt(document.getElementById('ans_add_c').value) || 0;
+            const feedbackEl = document.getElementById('quiz2-feedback');
+            if (ans_x2 === sum_coeffs.x2 && ans_x === sum_coeffs.x && ans_c === sum_coeffs.c) {
+                feedbackEl.innerHTML = '答對了！你真是個加法魔法師！✨';
+                feedbackEl.className = 'feedback correct';
+                setTimeout(generateQuiz2, 2000);
+            } else {
+                feedbackEl.innerHTML = '哎呀，好像不太對勁，再試一次，你一定可以的！';
+                feedbackEl.className = 'feedback incorrect';
+            }
+        }
+
+        // --- 測驗三的程式碼 (減法) ---
+        let poly3_coeffs = {}, poly4_coeffs = {}, diff_coeffs = {};
+        function generateQuiz3() {
+            poly3_coeffs = { x2: Math.floor(Math.random() * 10) + 5, x: Math.floor(Math.random() * 21) - 10, c: Math.floor(Math.random() * 21) - 10 };
+            poly4_coeffs = { x2: Math.floor(Math.random() * 5) + 1, x: Math.floor(Math.random() * 21) - 10, c: Math.floor(Math.random() * 21) - 10 };
+            diff_coeffs = { x2: poly3_coeffs.x2 - poly4_coeffs.x2, x: poly3_coeffs.x - poly4_coeffs.x, c: poly3_coeffs.c - poly4_coeffs.c };
+            
+            if (diff_coeffs.x2 === 0) {
+                 poly3_coeffs.x2 += 1;
+                 diff_coeffs.x2 = poly3_coeffs.x2 - poly4_coeffs.x2;
+            }
+            
+            const poly3Str = generatePolyString(poly3_coeffs);
+            const poly4Str = generatePolyString(poly4_coeffs);
+            document.getElementById('quiz3-question').innerHTML = `$(${poly3Str}) - (${poly4Str}) = ?$`;
+
+            document.getElementById('ans_sub_x2').value = '';
+            document.getElementById('ans_sub_x').value = '';
+            document.getElementById('ans_sub_c').value = '';
+            document.getElementById('quiz3-feedback').innerHTML = '';
+            document.getElementById('quiz3-feedback').className = 'feedback';
+            // 通知 MathJax 更新畫面
+            if(window.MathJax) { MathJax.typesetPromise(); }
+        }
+        function checkQuiz3() {
+            const ans_x2 = parseInt(document.getElementById('ans_sub_x2').value) || 0;
+            const ans_x = parseInt(document.getElementById('ans_sub_x').value) || 0;
+            const ans_c = parseInt(document.getElementById('ans_sub_c').value) || 0;
+            const feedbackEl = document.getElementById('quiz3-feedback');
+            if (ans_x2 === diff_coeffs.x2 && ans_x === diff_coeffs.x && ans_c === diff_coeffs.c) {
+                feedbackEl.innerHTML = '太強了，連減法都難不倒你！🎩';
+                feedbackEl.className = 'feedback correct';
+                setTimeout(generateQuiz3, 2000);
+            } else {
+                feedbackEl.innerHTML = '是不是忘了把後面的括號變號呀？再檢查一下喔！';
+                feedbackEl.className = 'feedback incorrect';
+            }
+        }
+    </script>
+</body>
+</html>
+
