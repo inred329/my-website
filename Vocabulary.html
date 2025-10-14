@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英文單字複習機</title>
+    <!-- 載入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 設定字體為 Inter (或任何無襯線字體) -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+        }
+        /* 自定義滾動條樣式，讓 textarea 更美觀 */
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 4px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background-color: #f1f5f9;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-4">
+
+    <!-- 主容器 -->
+    <div id="app" class="w-full max-w-lg bg-white shadow-xl rounded-2xl p-6 md:p-8 space-y-6">
+        <h1 class="text-3xl font-bold text-gray-800 text-center">英文單字複習機 🧠</h1>
+        <p id="user-info" class="text-sm text-gray-500 text-center break-all">使用者 ID: 載入中...</p>
+        
+        <!-- 狀態訊息與載入指示器 -->
+        <div id="status-message" class="text-center text-sm font-medium p-2 rounded-lg transition-opacity duration-300 opacity-0 h-8"></div>
+        <div id="loading-indicator" class="text-center text-blue-500 font-medium hidden">
+            <svg class="animate-spin h-5 w-5 mr-3 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            資料載入中...
+        </div>
+
+        <!-- 單字庫設定區塊 -->
+        <div id="config-view" class="space-y-4">
+            <h2 class="text-xl font-semibold text-gray-700 border-b pb-2">單字庫設定</h2>
+            
+            <textarea id="vocab-editor" rows="10" 
+                      class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm shadow-sm"
+                      placeholder="請輸入單字列表，每行一個單字與中文，中間用逗號分隔，例如：&#10;apple, 蘋果&#10;banana, 香蕉&#10;cat, 貓"></textarea>
+
+            <div class="flex flex-col space-y-2">
+                <button onclick="saveVocab()" 
+                        class="w-full bg-indigo-600 text-white font-semibold py-3 px-4 rounded-xl hover:bg-indigo-700 transition duration-150 ease-in-out shadow-lg transform hover:scale-[1.01]">
+                    儲存單字庫並開始複習
+                </button>
+                <button onclick="showQuizView()" id="start-quiz-button"
+                        class="w-full bg-emerald-500 text-white font-semibold py-2 px-4 rounded-xl hover:bg-emerald-600 transition duration-150 ease-in-out shadow-md" style="display: none;">
+                    繼續複習 (已有單字)
+                </button>
+            </div>
+            
+            <p class="text-xs text-gray-500 mt-2 text-center">
+                格式要求：英文, 中文 (中間請用半形逗號分隔，一行一組)
+            </p>
+        </div>
+
+        <!-- 複習區塊 (隱藏) -->
+        <div id="quiz-view" class="space-y-6 hidden pt-4">
+            <h2 class="text-xl font-semibold text-gray-700 text-center">開始複習！💪</h2>
+
+            <div class="bg-blue-50 p-6 rounded-xl text-center shadow-inner">
+                <p class="text-base text-gray-600 mb-2">請輸入下列中文對應的英文：</p>
+                <!-- 顯示中文並可點擊發音 -->
+                <button id="current-chinese" onclick="speakEnglishWord()"
+                        class="text-4xl font-extrabold text-blue-700 bg-white p-4 rounded-lg shadow-md cursor-pointer hover:bg-blue-100 transition transform hover:scale-105 active:scale-95 duration-200 w-full md:w-auto mx-auto border-4 border-blue-200">
+                    點我開始
+                </button>
+            </div>
+            
+            <!-- 使用者輸入區 -->
+            <div class="space-y-4">
+                <input type="text" id="english-input" placeholder="在這裡輸入英文單字..."
+                       class="w-full p-4 text-lg border-2 border-gray-300 rounded-xl focus:ring-purple-500 focus:border-purple-500 shadow-md transition"
+                       onkeydown="if (event.key === 'Enter') checkAnswer()">
+                
+                <button onclick="checkAnswer()"
+                        class="w-full bg-purple-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-purple-700 transition duration-150 ease-in-out shadow-lg transform hover:scale-[1.01]">
+                    檢查答案
+                </button>
+            </div>
+
+            <!-- 答案回饋區 -->
+            <div id="feedback-area" class="min-h-12 p-3 rounded-xl font-medium text-center transition-all duration-500 hidden"></div>
+            
+            <!-- 導航按鈕 -->
+            <div class="flex justify-between space-x-3 pt-4 border-t border-gray-200">
+                <button onclick="nextWord(true)" id="skip-button"
+                        class="flex-1 bg-yellow-500 text-white font-semibold py-2 rounded-xl hover:bg-yellow-600 transition shadow-md">
+                    跳過/顯示下一題
+                </button>
+                <button onclick="showConfigView()"
+                        class="flex-1 bg-gray-400 text-white font-semibold py-2 rounded-xl hover:bg-gray-500 transition shadow-md">
+                    返回設定
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Firebase SDK 載入 -->
+    <script type="module">
+        import { initializeApp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, doc, onSnapshot, setDoc
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // 設定全域變數 (Global variables setup)
+        window.vocabList = [];
+        window.currentWordIndex = 0;
+        window.db = null;
+        window.auth = null;
+        window.userId = null;
+        window.appId = typeof __app_id !== 'undefined' ? __app_id : 'vocab-review-app';
+
+        // 預設單字 (Default vocabulary for first-time users)
+        const defaultVocab = [
+            { english: "apple", chinese: "蘋果" },
+            { english: "banana", chinese: "香蕉" },
+            { english: "cat", chinese: "貓" },
+            { english: "dog", chinese: "狗" },
+            { english: "house", chinese: "房子" },
+            { english: "water", chinese: "水" },
+            { english: "computer", chinese: "電腦" },
+            { english: "book", chinese: "書本" },
+            { english: "friend", chinese: "朋友" },
+            { english: "happy", chinese: "快樂" },
+        ];
+
+        // UI 元素 (UI Elements)
+        const elements = {
+            loadingIndicator: document.getElementById('loading-indicator'),
+            statusMessage: document.getElementById('status-message'),
+            vocabEditor: document.getElementById('vocab-editor'),
+            configView: document.getElementById('config-view'),
+            quizView: document.getElementById('quiz-view'),
+            currentChinese: document.getElementById('current-chinese'),
+            englishInput: document.getElementById('english-input'),
+            feedbackArea: document.getElementById('feedback-area'),
+            userInfo: document.getElementById('user-info'),
+            startQuizButton: document.getElementById('start-quiz-button'),
+        };
+
+        // --- 輔助函式 (Utility Functions) ---
+
+        /** 顯示狀態訊息 */
+        function showStatus(message, isError = false) {
+            elements.statusMessage.textContent = message;
+            elements.statusMessage.className = `text-center text-sm font-medium p-2 rounded-lg transition-opacity duration-300 opacity-100 h-8 ${
+                isError ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
+            }`;
+            setTimeout(() => {
+                elements.statusMessage.classList.remove('opacity-100');
+                elements.statusMessage.classList.add('opacity-0');
+            }, 3000);
+        }
+
+        /** 洗牌演算法 (Fisher-Yates) */
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        /** 將單字列表轉換為編輯器文字格式 */
+        function vocabToText(vocab) {
+            return vocab.map(w => `${w.english}, ${w.chinese}`).join('\n');
+        }
+
+        /** 將編輯器文字格式轉換為單字列表 */
+        function textToVocab(text) {
+            const lines = text.split('\n').filter(line => line.trim() !== '');
+            return lines.map(line => {
+                const parts = line.split(',');
+                if (parts.length >= 2) {
+                    return {
+                        english: parts[0].trim().toLowerCase(),
+                        chinese: parts.slice(1).join(',').trim()
+                    };
+                }
+                return null;
+            }).filter(w => w !== null && w.english && w.chinese);
+        }
+
+        // --- Firebase 相關 (Firebase Setup and Data Handling) ---
+
+        /** 初始化 Firebase */
+        async function initializeFirebase() {
+            setLogLevel('debug');
+            elements.loadingIndicator.classList.remove('hidden');
+
+            try {
+                const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+                const app = initializeApp(firebaseConfig);
+                window.db = getFirestore(app);
+                window.auth = getAuth(app);
+                
+                // 嘗試使用自定義 token 登入，否則匿名登入
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(window.auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(window.auth);
+                }
+
+                onAuthStateChanged(window.auth, (user) => {
+                    if (user) {
+                        window.userId = user.uid;
+                        elements.userInfo.textContent = `使用者 ID: ${window.userId}`;
+                        setupVocabListener();
+                    } else {
+                        // 如果沒有登入，設置一個隨機 ID
+                        window.userId = crypto.randomUUID();
+                        elements.userInfo.textContent = `使用者 ID: ${window.userId} (匿名)`;
+                        // 即使匿名，也要嘗試載入或使用預設單字
+                        loadInitialVocab();
+                    }
+                    elements.loadingIndicator.classList.add('hidden');
+                });
+            } catch (error) {
+                console.error("Firebase 初始化失敗:", error);
+                showStatus("Firebase 連線失敗，將使用預設單字。詳情請查看控制台。", true);
+                loadInitialVocab(); // 即使失敗也使用預設單字
+                elements.loadingIndicator.classList.add('hidden');
+            }
+        }
+
+        /** 載入單字庫監聽器 */
+        function setupVocabListener() {
+            if (!window.db || !window.userId) return;
+
+            const vocabDocRef = doc(window.db, 
+                `artifacts/${window.appId}/users/${window.userId}/vocabulary`, 
+                "vocab_data"
+            );
+
+            onSnapshot(vocabDocRef, (docSnap) => {
+                if (docSnap.exists() && docSnap.data().list) {
+                    window.vocabList = docSnap.data().list;
+                    elements.vocabEditor.value = vocabToText(window.vocabList);
+                    showStatus(`單字庫 (${window.vocabList.length} 筆) 已從雲端載入。`);
+                    
+                    if (window.vocabList.length > 0) {
+                        elements.startQuizButton.style.display = 'block';
+                    }
+                } else {
+                    console.log("Firestore 中無單字資料，載入預設單字。");
+                    loadInitialVocab();
+                }
+            }, (error) => {
+                console.error("監聽單字庫失敗:", error);
+                showStatus("單字庫資料同步失敗。詳情請查看控制台。", true);
+                loadInitialVocab();
+            });
+        }
+
+        /** 載入或設置預設單字 */
+        function loadInitialVocab() {
+            if (window.vocabList.length === 0) {
+                window.vocabList = defaultVocab;
+                elements.vocabEditor.value = vocabToText(defaultVocab);
+                showStatus(`已載入 ${defaultVocab.length} 筆預設單字。請點擊「儲存」以保存至您的帳戶。`);
+            }
+            if (window.vocabList.length > 0) {
+                elements.startQuizButton.style.display = 'block';
+            }
+        }
+
+        /** 儲存單字庫到 Firestore */
+        window.saveVocab = async function() {
+            elements.loadingIndicator.classList.remove('hidden');
+            const newVocab = textToVocab(elements.vocabEditor.value);
+
+            if (newVocab.length === 0) {
+                showStatus("單字庫不能為空！", true);
+                elements.loadingIndicator.classList.add('hidden');
+                return;
+            }
+
+            window.vocabList = newVocab;
+            
+            if (window.db && window.userId) {
+                const vocabDocRef = doc(window.db, 
+                    `artifacts/${window.appId}/users/${window.userId}/vocabulary`, 
+                    "vocab_data"
+                );
+                
+                try {
+                    await setDoc(vocabDocRef, { list: window.vocabList });
+                    showStatus(`單字庫 (${window.vocabList.length} 筆) 儲存成功！`);
+                } catch (error) {
+                    console.error("儲存單字庫失敗:", error);
+                    showStatus("單字庫儲存到雲端失敗，請檢查網路。", true);
+                }
+            } else {
+                 showStatus(`單字庫 (${window.vocabList.length} 筆) 已在本地更新。`, true);
+            }
+
+            elements.loadingIndicator.classList.add('hidden');
+            showQuizView();
+        }
+
+        // --- 應用程式流程與 UI 顯示 ---
+
+        /** 顯示設定畫面 */
+        window.showConfigView = function() {
+            elements.quizView.classList.add('hidden');
+            elements.configView.classList.remove('hidden');
+            elements.feedbackArea.classList.add('hidden');
+            elements.englishInput.value = '';
+        }
+
+        /** 顯示複習畫面並開始測驗 */
+        window.showQuizView = function() {
+            if (window.vocabList.length === 0) {
+                showStatus("請先在設定區輸入單字！", true);
+                return;
+            }
+
+            // 洗牌並開始
+            window.vocabList = shuffleArray(window.vocabList);
+            window.currentWordIndex = 0;
+            
+            elements.configView.classList.add('hidden');
+            elements.quizView.classList.remove('hidden');
+            elements.feedbackArea.classList.add('hidden');
+
+            displayNewWord();
+            showStatus(`開始複習！共 ${window.vocabList.length} 筆單字。`);
+        }
+
+        /** 顯示下一個單字 */
+        function displayNewWord() {
+            elements.englishInput.value = '';
+            elements.feedbackArea.classList.add('hidden');
+
+            if (window.currentWordIndex >= window.vocabList.length) {
+                elements.currentChinese.textContent = "🥳 完成！點擊返回設定。";
+                elements.currentChinese.onclick = window.showConfigView;
+                elements.englishInput.setAttribute('disabled', 'true');
+                document.getElementById('skip-button').setAttribute('disabled', 'true');
+                document.querySelector('#quiz-view button:nth-child(2)').setAttribute('disabled', 'true'); // 檢查答案按鈕
+                showStatus("恭喜！所有單字都複習完畢了！");
+                return;
+            }
+
+            const currentWord = window.vocabList[window.currentWordIndex];
+            elements.currentChinese.textContent = currentWord.chinese;
+            elements.currentChinese.onclick = window.speakEnglishWord;
+            elements.englishInput.removeAttribute('disabled');
+            document.getElementById('skip-button').removeAttribute('disabled');
+            document.querySelector('#quiz-view button:nth-child(2)').removeAttribute('disabled'); // 檢查答案按鈕
+            elements.englishInput.focus();
+        }
+
+        /** 切換到下一個單字 */
+        window.nextWord = function(wasSkipped = false) {
+            if (wasSkipped) {
+                const skippedWord = window.vocabList[window.currentWordIndex];
+                showStatus(`已跳過：${skippedWord.english} (${skippedWord.chinese})`);
+            }
+            window.currentWordIndex++;
+            displayNewWord();
+        }
+
+        // --- 核心功能：單字檢查與發音 ---
+
+        /** 檢查使用者輸入的答案 */
+        window.checkAnswer = function() {
+            if (window.vocabList.length === 0 || window.currentWordIndex >= window.vocabList.length) return;
+
+            const currentWord = window.vocabList[window.currentWordIndex];
+            const userAnswer = elements.englishInput.value.trim().toLowerCase();
+            const correctEnglish = currentWord.english.toLowerCase();
+
+            elements.feedbackArea.classList.remove('hidden');
+            
+            if (userAnswer === correctEnglish) {
+                // 答對
+                elements.feedbackArea.innerHTML = `<span class="text-green-600 font-bold">✅ 正確！</span><br>太棒了，你拼對了！`;
+                elements.feedbackArea.classList.replace('bg-red-100', 'bg-green-100');
+                elements.feedbackArea.classList.replace('text-red-700', 'text-green-700');
+                
+                // 延遲後自動跳到下一題
+                setTimeout(() => window.nextWord(), 1000); 
+
+            } else {
+                // 答錯
+                elements.feedbackArea.innerHTML = 
+                    `<span class="text-red-600 font-bold">❌ 錯誤！</span><br>` + 
+                    `正確答案是：<span class="font-mono">${currentWord.english}</span><br>` +
+                    `請再試一次，或點擊「跳過/顯示下一題」。`;
+                elements.feedbackArea.classList.replace('bg-green-100', 'bg-red-100');
+                elements.feedbackArea.classList.replace('text-green-700', 'text-red-700');
+                
+                // 清空輸入框，讓使用者重新嘗試
+                elements.englishInput.value = '';
+                elements.englishInput.focus();
+            }
+        }
+
+        /** 唸出英文單字 (使用 Web Speech API) */
+        window.speakEnglishWord = function() {
+            if (!window.speechSynthesis) {
+                showStatus("抱歉，您的瀏覽器不支援發音功能。", true);
+                return;
+            }
+
+            if (window.vocabList.length === 0 || window.currentWordIndex >= window.vocabList.length) return;
+            
+            const textToSpeak = window.vocabList[window.currentWordIndex].english;
+            
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'en-US'; // 設定語言為美式英文
+            utterance.rate = 0.9; // 稍微慢一點
+            utterance.pitch = 1.0; 
+
+            // 確保語音沒有在播放中才開始新的播放
+            if (speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+            }
+            speechSynthesis.speak(utterance);
+        }
+
+        // --- 啟動應用程式 ---
+        window.onload = initializeFirebase;
+
+    </script>
+</body>
+</html>
