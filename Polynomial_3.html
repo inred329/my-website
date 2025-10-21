@@ -165,10 +165,8 @@
             <p>我們可以把它想像成一塊 $x \times x$ 的正方形，和兩塊 $3 \times x$ 的長方形。把它們拼起來看看：</p>
             <div class="geometric-proof">
                 <svg width="250" height="150" viewBox="0 0 130 80">
-                    <!-- x^2 block -->
                     <rect x="0" y="0" width="50" height="50" style="fill:#3498db;"/>
                     <text x="25" y="30" font-size="12" fill="white" text-anchor="middle">$x^2$</text>
-                    <!-- 6x blocks -->
                     <rect x="60" y="0" width="30" height="50" style="fill:#9b59b6;"/>
                     <text x="75" y="30" font-size="12" fill="white" text-anchor="middle">$3x$</text>
                     <rect x="95" y="0" width="30" height="50" style="fill:#9b59b6;"/>
@@ -224,7 +222,6 @@
             </div>
         </section>
 
-        <!-- 互動測驗 -->
         <div class="quiz-section">
             <h2>配方法小挑戰</h2>
             <p>要完成配方，最關鍵的就是找出那個「要補上的數字」。來挑戰看看吧！</p>
@@ -254,18 +251,15 @@
             let correctAnswer;
 
             function generateQuiz() {
-                // 產生一個偶數的 x 係數，方便國中生計算
                 const x_coeff = (Math.floor(Math.random() * 10) + 1) * 2; // 2, 4, ..., 20
                 const const_term = Math.floor(Math.random() * 20) + 1; // 1-20
                 
                 const questionHTML = `對於方程式 $x^2 + ${x_coeff}x = ${const_term}$`;
                 
-                // 計算正確答案
                 correctAnswer = Math.pow(x_coeff / 2, 2);
 
                 questionEl.innerHTML = questionHTML;
                 
-                // 清空作答區和回饋
                 answerInput.value = '';
                 feedbackEl.innerHTML = '';
                 feedbackEl.className = 'feedback';
@@ -286,24 +280,25 @@
                     feedbackEl.innerHTML = `差一點點喔！想想看 $x$ 項係數的一半再平方是多少呢？🤔`;
                     feedbackEl.className = 'feedback incorrect';
                 }
+                
+                // **這就是修正的地方！**
+                // 無論答對或答錯，都告訴 MathJax 檢查 feedbackEl 區塊
+                if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+                    MathJax.typesetPromise([feedbackEl]);
+                }
             }
 
-            // 設定按鈕的事件監聽
             checkBtn.addEventListener('click', checkQuiz);
             newQuestionBtn.addEventListener('click', generateQuiz);
             
-            // 讓使用者按 Enter 也可以檢查答案
             answerInput.addEventListener('keyup', function(event) {
                 if (event.key === 'Enter') {
                     checkQuiz();
                 }
             });
 
-
-            // 初始啟動
             generateQuiz();
         });
     </script>
 </body>
 </html>
-
