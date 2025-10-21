@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二次方程式魔法：配方法</title>
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', 'Helvetica', 'Microsoft JhengHei', sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f9;
+            color: #333;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px 0;
+        }
+        header {
+            background: #2c3e50;
+            color: #ffffff;
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: #1abc9c 5px solid;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.8em;
+        }
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        section {
+            background: #ffffff;
+            padding: 25px;
+            margin-top: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eaecee;
+            padding-bottom: 10px;
+        }
+        .step-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .step-box h3 {
+            margin-top: 0;
+            color: #2980b9;
+        }
+        .highlight {
+            background-color: #fffbe6;
+            color: #d46b08;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .geometric-proof {
+            text-align: center;
+            padding: 10px;
+            margin: 20px 0;
+        }
+        .quiz-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: #e8f8f5;
+            border: 2px dashed #1abc9c;
+            border-radius: 12px;
+        }
+        .quiz-question {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 80px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1.1em;
+            text-align: center;
+        }
+        button {
+            background: #1abc9c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #16a085;
+        }
+        .btn-secondary {
+            background-color: #95a5a6;
+        }
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+        .feedback {
+            margin-top: 15px;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .correct {
+            color: #27ae60;
+            background-color: #e8f8f5;
+            border: 1px solid #a9dfbf;
+        }
+        .incorrect {
+            color: #c0392b;
+            background-color: #fdedec;
+            border: 1px solid #fadbd8;
+        }
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 20px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1>二次方程式魔法：配方法</h1>
+            <p>把不完美的拼圖，變成完美的正方形！</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <section>
+            <h2>🤔 為什麼需要「配方法」？</h2>
+            <p>我們知道，有些二次方程式可以用十字交乘法分解，例如 $x^2 + 5x + 6 = 0$ 可以變成 $(x+2)(x+3)=0$。</p>
+            <p>但如果遇到像 $x^2 + 6x - 2 = 0$ 這樣的方程式，你會發現很難用十字交乘法找出整數解。這時候，「配方法」就像一位超級英雄，專門來解決這種難題！</p>
+        </section>
+
+        <section>
+            <h2>🧩 核心思想：拼出一個正方形</h2>
+            <p>「配方法」的英文叫做 "Completing the Square"，意思就是「完成那個正方形」。讓我們用圖形來看看這是什麼意思。</p>
+            <p>假設我們有方程式的一部分：$x^2 + 6x$。</p>
+            <p>我們可以把它想像成一塊 $x \times x$ 的正方形，和兩塊 $3 \times x$ 的長方形。把它們拼起來看看：</p>
+            <div class="geometric-proof">
+                <svg width="250" height="150" viewBox="0 0 130 80">
+                    <!-- x^2 block -->
+                    <rect x="0" y="0" width="50" height="50" style="fill:#3498db;"/>
+                    <text x="25" y="30" font-size="12" fill="white" text-anchor="middle">$x^2$</text>
+                    <!-- 6x blocks -->
+                    <rect x="60" y="0" width="30" height="50" style="fill:#9b59b6;"/>
+                    <text x="75" y="30" font-size="12" fill="white" text-anchor="middle">$3x$</text>
+                    <rect x="95" y="0" width="30" height="50" style="fill:#9b59b6;"/>
+                    <text x="110" y="30" font-size="12" fill="white" text-anchor="middle">$3x$</text>
+                </svg>
+            </div>
+            <p>為了把它拼成一個大正方形，我們把其中一塊 $3x$ 的長方形移到下面：</p>
+            <div class="geometric-proof">
+                 <svg width="200" height="200" viewBox="0 0 85 85">
+                    <rect x="0" y="0" width="50" height="50" style="fill:#3498db; stroke:white; stroke-width:1"/>
+                    <text x="25" y="30" font-size="12" fill="white" text-anchor="middle">$x^2$</text>
+                    <rect x="50" y="0" width="30" height="50" style="fill:#9b59b6; stroke:white; stroke-width:1"/>
+                    <text x="65" y="30" font-size="12" fill="white" text-anchor="middle">$3x$</text>
+                    <rect x="0" y="50" width="50" height="30" style="fill:#9b59b6; stroke:white; stroke-width:1"/>
+                    <text x="25" y="65" font-size="12" fill="white" text-anchor="middle">$3x$</text>
+                    <rect x="50" y="50" width="30" height="30" style="fill:#ecf0f1; stroke:black; stroke-dasharray: 2,2; stroke-width:1"/>
+                    <text x="65" y="65" font-size="12" fill="black" text-anchor="middle">?</text>
+                </svg>
+            </div>
+            <p>看到了嗎？右下角出現了一個缺口！這個缺口的大小正好是 $3 \times 3 = 9$。只要我們補上這一塊，它就變成了一個邊長為 $(x+3)$ 的完美大正方形！</p>
+            <p>這個「補上9」的動作，就是「配方」的精髓！而這個「9」是怎麼來的呢？它就是 <span class="highlight">x項係數(6)的一半(3)，再平方(9)</span>。</p>
+        </section>
+
+        <section>
+            <h2>🪄 配方法的魔法步驟</h2>
+            <p>我們用 $x^2 + 6x - 2 = 0$ 來示範一次完整的配方法解題流程：</p>
+            <div class="step-box">
+                <h3>第一步：移走常數項</h3>
+                <p>把數字項移到等號右邊，讓 $x$ 的項都留在左邊。</p>
+                <p>$x^2 + 6x = 2$</p>
+            </div>
+            <div class="step-box">
+                <h3>第二步：找出要補上的數字</h3>
+                <p>找出 $x$ 項係數的一半再平方。這個例子中，係數是 6。</p>
+                <p>$(6 \div 2)^2 = 3^2 = 9$</p>
+            </div>
+             <div class="step-box">
+                <h3>第三步：兩邊都補上（公平原則）</h3>
+                <p>為了保持等式平衡，等號兩邊必須同時加上 9。</p>
+                <p>$x^2 + 6x + 9 = 2 + 9$</p>
+            </div>
+             <div class="step-box">
+                <h3>第四步：左邊變身成完全平方</h3>
+                <p>左邊現在可以寫成一個完美的平方形式了！</p>
+                <p>$(x+3)^2 = 11$</p>
+            </div>
+             <div class="step-box">
+                <h3>第五步：開根號求解</h3>
+                <p>去掉平方，記得右邊要加上正負根號！</p>
+                <p>$x+3 = \pm\sqrt{11}$</p>
+                <p>$x = -3 \pm\sqrt{11}$</p>
+                <p>解出來了！這就是我們的兩個解：$-3 + \sqrt{11}$ 和 $-3 - \sqrt{11}$。</p>
+            </div>
+        </section>
+
+        <!-- 互動測驗 -->
+        <div class="quiz-section">
+            <h2>配方法小挑戰</h2>
+            <p>要完成配方，最關鍵的就是找出那個「要補上的數字」。來挑戰看看吧！</p>
+            <div id="quiz-question" class="quiz-question"></div>
+            <p>請問，等號兩邊要同時加上多少，才能讓左邊變成完全平方式？</p>
+            <input type="number" id="quiz-answer">
+            <div style="margin-top:15px;">
+                <button id="check-btn">我確定！</button>
+                <button id="new-question-btn" class="btn-secondary">換一題</button>
+            </div>
+            <div id="quiz-feedback" class="feedback"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>你太厲害了，已經掌握配方法的秘密了！</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const questionEl = document.getElementById('quiz-question');
+            const answerInput = document.getElementById('quiz-answer');
+            const feedbackEl = document.getElementById('quiz-feedback');
+            const checkBtn = document.getElementById('check-btn');
+            const newQuestionBtn = document.getElementById('new-question-btn');
+
+            let correctAnswer;
+
+            function generateQuiz() {
+                // 產生一個偶數的 x 係數，方便國中生計算
+                const x_coeff = (Math.floor(Math.random() * 10) + 1) * 2; // 2, 4, ..., 20
+                const const_term = Math.floor(Math.random() * 20) + 1; // 1-20
+                
+                const questionHTML = `對於方程式 $x^2 + ${x_coeff}x = ${const_term}$`;
+                
+                // 計算正確答案
+                correctAnswer = Math.pow(x_coeff / 2, 2);
+
+                questionEl.innerHTML = questionHTML;
+                
+                // 清空作答區和回饋
+                answerInput.value = '';
+                feedbackEl.innerHTML = '';
+                feedbackEl.className = 'feedback';
+                
+                if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+                    MathJax.typesetPromise([questionEl]);
+                }
+            }
+
+            function checkQuiz() {
+                const userAnswer = parseInt(answerInput.value);
+
+                if (userAnswer === correctAnswer) {
+                    feedbackEl.innerHTML = `答對了！就是 ${correctAnswer}！你抓到訣竅了！🎉`;
+                    feedbackEl.className = 'feedback correct';
+                    setTimeout(generateQuiz, 2000);
+                } else {
+                    feedbackEl.innerHTML = `差一點點喔！想想看 $x$ 項係數的一半再平方是多少呢？🤔`;
+                    feedbackEl.className = 'feedback incorrect';
+                }
+            }
+
+            // 設定按鈕的事件監聽
+            checkBtn.addEventListener('click', checkQuiz);
+            newQuestionBtn.addEventListener('click', generateQuiz);
+            
+            // 讓使用者按 Enter 也可以檢查答案
+            answerInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    checkQuiz();
+                }
+            });
+
+
+            // 初始啟動
+            generateQuiz();
+        });
+    </script>
+</body>
+</html>
+
