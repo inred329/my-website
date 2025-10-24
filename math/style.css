@@ -1,0 +1,75 @@
+/* 基本設定 */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    background: #fdfdfd;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+main {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 0 20px;
+    flex-grow: 1; /* 讓 main 區域填滿可用空間 */
+}
+header {
+    background: #004a99;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+header h1 {
+    margin: 0.5rem 0;
+}
+header p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+footer {
+    text-align: center;
+    padding: 1rem;
+    background: #333;
+    color: #aaa;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+}
+
+/* 列表頁 */
+.unit {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.unit h3 {
+    margin-top: 0;
+    border-bottom: 2px solid #004a99;
+    padding-bottom: 5px;
+    color: #004a99;
+}
+.unit ul {
+    padding-left: 0;
+    list-style-type: none; /* 移除項目符號 */
+}
+.unit li {
+    margin-bottom: 0.5rem;
+}
+.unit li a {
+    text-decoration: none;
+    color: #0056b3;
+    font-weight: 500;
+    font-size: 1.1rem;
+    padding: 5px 0;
+    display: block;
+    transition: color 0.2s ease;
+}
+.unit li a:hover {
+    color: #d9534f;
+}
