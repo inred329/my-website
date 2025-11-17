@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的投影片分享</title>
+    <!-- 載入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 載入 Inter 字型 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 優先使用 Inter，然後是 Noto Sans TC 作為中文字型 */
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+        }
+    </style>
+    <script>
+        // 設定 Tailwind CSS
+        tailwind.config = {
+            darkMode: 'class', // 啟用 class 基礎的暗黑模式
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex items-center justify-center p-6">
+
+    <div class="w-full max-w-2xl mx-auto">
+        <div class="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden">
+            <div class="p-8 sm:p-12">
+                <!-- 網頁標題 -->
+                <h1 class="text-3xl sm:text-4xl font-bold text-center text-blue-600 dark:text-blue-400 mb-8">
+                    我的投影片分享
+                </h1>
+
+                <!-- 投影片連結列表 -->
+                <div class="space-y-4">
+                    
+
+                    <!-- 連結 6: HTML & GitHub Pages -->
+                    <a href="https://gamma.app/docs/HTMLGitHub-Pages-r3fae6e4x1elptl" target="_blank" rel="noopener noreferrer" class="block p-6 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-1">HTML & GitHub Pages 簡報</h2>
+                        <p class="text-sm text-blue-500 dark:text-blue-400 break-all">https://gamma.app/docs/HTMLGitHub-Pages-r3fae6e4x1elptl</p>
+                    </a>
+                    <!-- 連結 5: JavaScript -->
+                    <a href="https://gamma.app/docs/JavaScript-zstgit8pjt6qnbn" target="_blank" rel="noopener noreferrer" class="block p-6 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-1">JavaScript 簡報</h2>
+                        <p class="text-sm text-blue-500 dark:text-blue-400 break-all">https://gamma.app/docs/JavaScript-zstgit8pjt6qnbn</p>
+                    </a>
+                    <!-- 連結 3: JSON -->
+                    <a href="https://gamma.app/docs/JSON--4h2075c6xbyy7b1" target="_blank" rel="noopener noreferrer" class="block p-6 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-1">JSON 簡報</h2>
+                        <p class="text-sm text-blue-500 dark:text-blue-400 break-all">https://gamma.app/docs/JSON--4h2075c6xbyy7b1</p>
+                    </a>
+                    <!-- 連結 4: HTML5 Canvas 2D -->
+                    <a href="https://gamma.app/docs/HTML5-Canvas-2D--c0kanc4uk776h77" target="_blank" rel="noopener noreferrer" class="block p-6 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-1">HTML5 Canvas 2D 簡報</h2>
+                        <p class="text-sm text-blue-500 dark:text-blue-400 break-all">https://gamma.app/docs/HTML5-Canvas-2D--c0kanc4uk776h77</p>
+                    </a>
+                    <!-- 連結 2: chart.js -->
+                    <a href="https://gamma.app/docs/-xk9lnienpqt40ui" target="_blank" rel="noopener noreferrer" class="block p-6 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-1">Chart.js 簡報</h2>
+                        <p class="text-sm text-blue-500 dark:text-blue-400 break-all">https://gamma.app/docs/-xk9lnienpqt40ui</p>
+                    </a>
+                    <!-- 連結 1: SVG -->
+                    <a href="https://gamma.app/docs/SVG--u7eomap1eso0l93" target="_blank" rel="noopener noreferrer" class="block p-6 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-1">SVG 簡報</h2>
+                        <p class="text-sm text-blue-500 dark:text-blue-400 break-all">https://gamma.app/docs/SVG--u7eomap1eso0l93</p>
+                    </a>
+
+
+
+
+                </div>
+            </div>
+        </div>
+        
+        <!-- 頁腳 -->
+        <footer class="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
+            <p>頁面由 AI 產生</p>
+        </footer>
+    </div>
+
+</body>
+</html>
