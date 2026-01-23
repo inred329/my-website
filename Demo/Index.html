@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG 橫向滾動 </title>
+    <style>
+        body, html {
+            margin: 0; padding: 0; overflow: hidden; height: 100%; background-color: #87CEEB;
+        }
+        #game-viewport {
+            position: relative; width: 100vw; height: 100vh; overflow: hidden;
+        }
+        #world-layer {
+            position: absolute; top: 0; left: 0; height: 100%; display: flex;
+            will-change: transform; transition: transform 0.1s ease-out;
+        }
+        .scene {
+            width: 100vw; height: 100%; flex-shrink: 0; display: flex;
+            justify-content: center; align-items: center; font-size: 3rem; color: white;
+            font-weight: bold; border-right: 5px solid rgba(255,255,255,0.3);
+        }
+        .scene:nth-child(1) { background: linear-gradient(to bottom, transparent 60%, #228B22 60%); }
+        .scene:nth-child(2) { background: linear-gradient(to bottom, transparent 55%, #556B2F 55%); }
+        .scene:nth-child(3) { background: linear-gradient(to bottom, transparent 65%, #8B4513 65%); }
+
+
+        #character-container {
+            position: absolute;
+            bottom: 22%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            width: 100px; /* SVG 寬度 */
+            height: 100px; /* SVG 高度 */
+        }
+
+        #character-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 10px 5px rgba(0,0,0,0.3));
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="game-viewport">
+        <div id="world-layer">
+            <div class="scene">場景 1</div>
+            <div class="scene">場景 2</div>
+            <div class="scene">場景 3</div>
+        </div>
+
+        <div id="character-container">
+            <img id="character-img" src="" alt="Character">
+        </div>
+    </div>
+
+
+    <script>
+        const svgFrames = [
+            'images/walk1.svg', // 這是靜止站立圖
+            'images/walk2.svg',
+            'images/walk3.svg',
+            'images/walk4.svg',
+            'images/walk5.svg',
+            'images/walk6.svg'
+        ];
+
+        const charImgElement = document.getElementById('character-img');
+        // 設定初始圖片為第一張
+        charImgElement.src = svgFrames[0];
+
+        svgFrames.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
+
+
+        let currentFrameIndex = 0; // 目前播到第幾張
+        let animationInterval = null; // 用來存放 setInterval 的變數
+        let isWalking = false; // 狀態標記：是否正在走路中
+
+        function playNextFrame() {
+            // 索引 +1，並使用取餘數 (%) 確保在 0 到 5 之間循環
+            currentFrameIndex = (currentFrameIndex + 1) % svgFrames.length;
+            // 切換圖片來源
+            charImgElement.src = svgFrames[currentFrameIndex];
+        }
+
+        function startWalking() {
+            if (isWalking) return;
+            isWalking = true;
+            
+            animationInterval = setInterval(playNextFrame, 100);
+        }
+
+        function stopWalking() {
+            if (!isWalking) return;
+            isWalking = false;
+            clearInterval(animationInterval);
+            animationInterval = null;
+            currentFrameIndex = 0;
+            charImgElement.src = svgFrames[0];
+        }
+
+
+        const worldLayer = document.getElementById('world-layer');
+        let currentScrollX = 0;
+        let maxScrollX = worldLayer.offsetWidth - window.innerWidth;
+        let stopScrollingTimer = null;
+
+        window.addEventListener('wheel', (e) => {
+            e.preventDefault();
+
+            currentScrollX += e.deltaY * 0.7;
+            currentScrollX = Math.max(0, Math.min(currentScrollX, maxScrollX));
+            worldLayer.style.transform = `translateX(-${currentScrollX}px)`;
+
+            startWalking();
+
+            if (stopScrollingTimer !== null) {
+                clearTimeout(stopScrollingTimer);
+            }
+
+            stopScrollingTimer = setTimeout(() => {
+                stopWalking();
+            }, 150);
+
+        }, { passive: false });
+
+        window.addEventListener('resize', () => {
+             maxScrollX = worldLayer.offsetWidth - window.innerWidth;
+        });
+
+    </script>
+</body>
+</html>
