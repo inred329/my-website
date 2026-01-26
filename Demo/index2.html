@@ -201,7 +201,6 @@
         const hexLayers = document.querySelectorAll('.hex-layer');
         const hexOverlay = document.getElementById('hex-overlay');
         const overlayTriangle = hexOverlay.querySelector('.hex-overlay-triangle');
-        const overlayPoints = hexOverlay.querySelectorAll('.hex-overlay-point');
 
         function openHexOverlay() {
             hexOverlay.classList.add('is-active');
@@ -211,10 +210,6 @@
         function closeHexOverlay() {
             hexOverlay.classList.remove('is-active');
             hexOverlay.setAttribute('aria-hidden', 'true');
-        }
-
-        function handleOverlayPointClick(event) {
-            event.stopPropagation();
         }
 
         function handleOverlayTriangleClick(event) {
@@ -280,10 +275,6 @@
             if (event.target === hexOverlay) {
                 closeHexOverlay();
             }
-        });
-
-        overlayPoints.forEach(point => {
-            point.addEventListener('click', handleOverlayPointClick);
         });
 
         overlayTriangle.addEventListener('click', handleOverlayTriangleClick);
