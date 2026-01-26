@@ -130,6 +130,52 @@
             pointer-events: all;
         }
 
+        #marquee-overlay {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease;
+            z-index: 40;
+        }
+
+        #marquee-overlay.is-active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #marquee-text {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            line-height: 1.6;
+            text-align: center;
+            color: #b3b3b3;
+            cursor: pointer;
+            user-select: none;
+            white-space: pre-wrap;
+        }
+
+        .marquee-line {
+            color: #b3b3b3;
+            transition: color 0.2s ease;
+        }
+
+        .marquee-line.is-center {
+            color: #b9d9ff;
+            text-shadow: 0 0 8px rgba(130, 180, 255, 0.6);
+        }
+
         @keyframes hex-flicker {
             0%,
             100% {
@@ -173,6 +219,10 @@
         </div>
     </div>
 
+    <div id="marquee-overlay" aria-hidden="true">
+        <div id="marquee-text" role="button" aria-label="跑馬燈文字"></div>
+    </div>
+
     <button id="series-toggle" type="button">切換到可愛系列</button>
 
     <script>
@@ -201,6 +251,20 @@
         const hexLayers = document.querySelectorAll('.hex-layer');
         const hexOverlay = document.getElementById('hex-overlay');
         const overlayTriangle = hexOverlay.querySelector('.hex-overlay-triangle');
+        const marqueeOverlay = document.getElementById('marquee-overlay');
+        const marqueeText = document.getElementById('marquee-text');
+
+        const marqueeState = {
+            animationId: null,
+            isActive: false,
+            isPaused: false,
+            currentOffset: 0,
+            startOffset: 0,
+            endOffset: 0,
+            speed: 0,
+            lastTimestamp: null,
+            lastCenterIndex: -1
+        };
 
         function openHexOverlay() {
             hexOverlay.classList.add('is-active');
@@ -212,8 +276,132 @@
             hexOverlay.setAttribute('aria-hidden', 'true');
         }
 
+        function openMarqueeOverlay() {
+            marqueeOverlay.classList.add('is-active');
+            marqueeOverlay.setAttribute('aria-hidden', 'false');
+            marqueeState.isActive = true;
+            marqueeState.isPaused = false;
+            marqueeState.lastTimestamp = null;
+
+            return fetch('content_1.txt')
+                .then(response => response.text())
+                .then(text => {
+                    const lines = text.split(/\r?\n/);
+                    marqueeText.innerHTML = '';
+                    lines.forEach(line => {
+                        const lineElement = document.createElement('div');
+                        lineElement.className = 'marquee-line';
+                        lineElement.textContent = line === '' ? ' ' : line;
+                        marqueeText.appendChild(lineElement);
+                    });
+
+                    requestAnimationFrame(() => {
+                        const lineElements = marqueeText.querySelectorAll('.marquee-line');
+                        if (!lineElements.length) {
+                            return;
+                        }
+
+                        const lineHeight = lineElements[0].getBoundingClientRect().height;
+                        const overlayHeight = marqueeOverlay.getBoundingClientRect().height;
+                        marqueeState.startOffset = (overlayHeight / 2) - (lineHeight / 2);
+                        marqueeState.endOffset = marqueeState.startOffset - (lineHeight * (lineElements.length - 1));
+                        marqueeState.currentOffset = marqueeState.startOffset;
+                        marqueeState.speed = lineHeight / 1.1;
+                        updateMarqueePosition();
+                        updateMarqueeCenterLine();
+                        startMarqueeScroll();
+                    });
+                })
+                .catch(() => {
+                    marqueeText.innerHTML = '<div class="marquee-line">無法載入內容</div>';
+                });
+        }
+
+        function closeMarqueeOverlay() {
+            marqueeOverlay.classList.remove('is-active');
+            marqueeOverlay.setAttribute('aria-hidden', 'true');
+            marqueeState.isActive = false;
+            marqueeState.isPaused = false;
+            marqueeState.lastTimestamp = null;
+            if (marqueeState.animationId) {
+                cancelAnimationFrame(marqueeState.animationId);
+                marqueeState.animationId = null;
+            }
+            marqueeState.lastCenterIndex = -1;
+            marqueeText.innerHTML = '';
+        }
+
+        function updateMarqueePosition() {
+            marqueeText.style.transform = `translate(-50%, -50%) translateY(${marqueeState.currentOffset}px)`;
+        }
+
+        function updateMarqueeCenterLine() {
+            const lineElements = marqueeText.querySelectorAll('.marquee-line');
+            if (!lineElements.length) return;
+
+            const lineHeight = lineElements[0].getBoundingClientRect().height;
+            const centerIndex = Math.round((marqueeState.startOffset - marqueeState.currentOffset) / lineHeight);
+            const clampedIndex = Math.min(Math.max(centerIndex, 0), lineElements.length - 1);
+
+            if (marqueeState.lastCenterIndex !== clampedIndex) {
+                if (lineElements[marqueeState.lastCenterIndex]) {
+                    lineElements[marqueeState.lastCenterIndex].classList.remove('is-center');
+                }
+                lineElements[clampedIndex].classList.add('is-center');
+                marqueeState.lastCenterIndex = clampedIndex;
+            }
+        }
+
+        function startMarqueeScroll() {
+            if (marqueeState.animationId) {
+                cancelAnimationFrame(marqueeState.animationId);
+            }
+
+            const step = (timestamp) => {
+                if (!marqueeState.isActive) {
+                    marqueeState.animationId = null;
+                    return;
+                }
+
+                if (!marqueeState.lastTimestamp) {
+                    marqueeState.lastTimestamp = timestamp;
+                }
+
+                const deltaSeconds = (timestamp - marqueeState.lastTimestamp) / 1000;
+                marqueeState.lastTimestamp = timestamp;
+
+                if (!marqueeState.isPaused) {
+                    marqueeState.currentOffset -= marqueeState.speed * deltaSeconds;
+                    if (marqueeState.currentOffset <= marqueeState.endOffset) {
+                        marqueeState.currentOffset = marqueeState.endOffset;
+                    }
+                    updateMarqueePosition();
+                    updateMarqueeCenterLine();
+                }
+
+                if (marqueeState.currentOffset <= marqueeState.endOffset) {
+                    marqueeState.animationId = null;
+                    return;
+                }
+
+                marqueeState.animationId = requestAnimationFrame(step);
+            };
+
+            marqueeState.animationId = requestAnimationFrame(step);
+        }
+
+        function toggleMarqueePause() {
+            marqueeState.isPaused = !marqueeState.isPaused;
+            if (!marqueeState.isPaused) {
+                marqueeState.lastTimestamp = null;
+                startMarqueeScroll();
+            }
+        }
+
         function handleOverlayTriangleClick(event) {
             event.stopPropagation();
+            closeHexOverlay();
+            openMarqueeOverlay();
         }
 
         function preloadFrames(frames) {
@@ -278,6 +466,17 @@
         });
 
         overlayTriangle.addEventListener('click', handleOverlayTriangleClick);
+
+        marqueeOverlay.addEventListener('click', (event) => {
+            if (!marqueeText.contains(event.target)) {
+                closeMarqueeOverlay();
+            }
+        });
+
+        marqueeText.addEventListener('click', (event) => {
+            event.stopPropagation();
+            toggleMarqueePause();
+        });
 
         let currentX = 0;
         let maxX = 0;
