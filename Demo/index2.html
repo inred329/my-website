@@ -100,7 +100,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: transparent;
+            background: rgba(0, 0, 0, 0.5);
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.2s ease;
@@ -162,11 +162,11 @@
                 <defs>
                     <mask id="overlay-cutout">
                         <rect width="720" height="405" fill="white"></rect>
-                        <path d="M 290 135 Q 260 180 290 270 Q 310 325 370 315 L 515 240 Q 560 220 515 200 L 370 105 Q 310 95 290 135 Z" fill="black"></path>
+                        <path d="M 308 150 Q 290 160 290 182 L 290 223 Q 290 245 308 255 L 430 228 Q 452 222 440 206 L 430 195 L 308 150 Z" fill="black"></path>
                     </mask>
                 </defs>
                 <rect width="720" height="405" fill="#000" mask="url(#overlay-cutout)"></rect>
-                <path class="hex-overlay-triangle" d="M 290 135 Q 260 180 290 270 Q 310 325 370 315 L 515 240 Q 560 220 515 200 L 370 105 Q 310 95 290 135 Z" fill="transparent"></path>
+                <path class="hex-overlay-triangle" d="M 308 150 Q 290 160 290 182 L 290 223 Q 290 245 308 255 L 430 228 Q 452 222 440 206 L 430 195 L 308 150 Z" fill="transparent"></path>
                 <g class="hex-overlay-points" fill="transparent">
                     <circle class="hex-overlay-point" cx="360" cy="65" r="16"></circle>
                     <circle class="hex-overlay-point" cx="590" cy="200" r="16"></circle>
