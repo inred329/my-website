@@ -42,6 +42,25 @@
             filter: drop-shadow(0 10px 5px rgba(0,0,0,0.3));
         }
 
+        #series-toggle {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 20;
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: none;
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+        }
+
+        #series-toggle:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
     </style>
 </head>
 <body>
@@ -58,25 +77,38 @@
         </div>
     </div>
 
+    <button id="series-toggle" type="button">切換到可愛系列</button>
 
     <script>
-        const svgFrames = [
-            'images/Walk1_cute.svg', // 這是靜止站立圖
-            'images/Walk2_cute.svg',
-            'images/Walk3_cute.svg',
-            'images/Walk4_cute.svg',
-            'images/Walk5_cute.svg',
-            'images/Walk6_cute.svg'
+        const seriesOptions = [
+            { label: '一般系列', suffix: '' },
+            { label: '可愛系列', suffix: '_cute' }
         ];
 
-        const charImgElement = document.getElementById('character-img');
-        // 設定初始圖片為第一張
-        charImgElement.src = svgFrames[0];
+        let currentSeriesIndex = 1;
+        let svgFrames = buildFrames(seriesOptions[currentSeriesIndex].suffix);
 
-        svgFrames.forEach(src => {
-            const img = new Image();
-            img.src = src;
-        });
+        function buildFrames(suffix) {
+            return [
+                `image/Walk1${suffix}.svg`,
+                `image/Walk2${suffix}.svg`,
+                `image/Walk3${suffix}.svg`,
+                `image/Walk4${suffix}.svg`,
+                `image/Walk5${suffix}.svg`,
+                `image/Walk6${suffix}.svg`
+            ];
+        }
+
+        const charImgElement = document.getElementById('character-img');
+        const seriesToggleButton = document.getElementById('series-toggle');
+        function preloadFrames(frames) {
+            frames.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+        }
+
+        preloadFrames(svgFrames);
 
 
         let currentFrameIndex = 0; // 目前播到第幾張
@@ -106,6 +138,21 @@
             charImgElement.src = svgFrames[0];
         }
 
+        function setSeries(index) {
+            currentSeriesIndex = index;
+            svgFrames = buildFrames(seriesOptions[currentSeriesIndex].suffix);
+            preloadFrames(svgFrames);
+            currentFrameIndex = 0;
+            charImgElement.src = svgFrames[0];
+            seriesToggleButton.textContent = `切換到${seriesOptions[(currentSeriesIndex + 1) % seriesOptions.length].label}`;
+        }
+
+        seriesToggleButton.addEventListener('click', () => {
+            const nextIndex = (currentSeriesIndex + 1) % seriesOptions.length;
+            setSeries(nextIndex);
+        });
+
+        setSeries(currentSeriesIndex);
 
         const worldLayer = document.getElementById('world-layer');
         let currentScrollX = 0;
