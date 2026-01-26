@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG 走路示範</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: "Noto Sans TC", sans-serif;
+            background: url('images/green.png') center center / cover no-repeat;
+        }
+
+        #stage {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        #character-container {
+            position: absolute;
+            bottom: 18%;
+            left: 0;
+            width: 110px;
+            height: 110px;
+            z-index: 10;
+            transition: left 0.05s linear;
+        }
+
+        #character-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 10px 5px rgba(0,0,0,0.35));
+            transition: transform 0.1s ease;
+        }
+
+        #series-toggle {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 20;
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: none;
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+        }
+
+        #series-toggle:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+    </style>
+</head>
+<body>
+    <div id="stage">
+        <div id="character-container">
+            <img id="character-img" src="" alt="Character">
+        </div>
+    </div>
+
+    <button id="series-toggle" type="button">切換到可愛系列</button>
+
+    <script>
+        const seriesOptions = [
+            { label: '一般系列', suffix: '' },
+            { label: '可愛系列', suffix: '_cute' }
+        ];
+
+        let currentSeriesIndex = 1;
+        let svgFrames = buildFrames(seriesOptions[currentSeriesIndex].suffix);
+
+        function buildFrames(suffix) {
+            return [
+                `image/Walk1${suffix}.svg`,
+                `image/Walk2${suffix}.svg`,
+                `image/Walk3${suffix}.svg`,
+                `image/Walk4${suffix}.svg`,
+                `image/Walk5${suffix}.svg`,
+                `image/Walk6${suffix}.svg`
+            ];
+        }
+
+        const charImgElement = document.getElementById('character-img');
+        const characterContainer = document.getElementById('character-container');
+        const seriesToggleButton = document.getElementById('series-toggle');
+
+        function preloadFrames(frames) {
+            frames.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+        }
+
+        preloadFrames(svgFrames);
+
+        let currentFrameIndex = 0;
+        let animationInterval = null;
+        let isWalking = false;
+
+        function playNextFrame() {
+            currentFrameIndex = (currentFrameIndex + 1) % svgFrames.length;
+            charImgElement.src = svgFrames[currentFrameIndex];
+        }
+
+        function startWalking() {
+            if (isWalking) return;
+            isWalking = true;
+            animationInterval = setInterval(playNextFrame, 100);
+        }
+
+        function stopWalking() {
+            if (!isWalking) return;
+            isWalking = false;
+            clearInterval(animationInterval);
+            animationInterval = null;
+            currentFrameIndex = 0;
+            charImgElement.src = svgFrames[0];
+        }
+
+        function setSeries(index) {
+            currentSeriesIndex = index;
+            svgFrames = buildFrames(seriesOptions[currentSeriesIndex].suffix);
+            preloadFrames(svgFrames);
+            currentFrameIndex = 0;
+            charImgElement.src = svgFrames[0];
+            seriesToggleButton.textContent = `切換到${seriesOptions[(currentSeriesIndex + 1) % seriesOptions.length].label}`;
+        }
+
+        seriesToggleButton.addEventListener('click', () => {
+            const nextIndex = (currentSeriesIndex + 1) % seriesOptions.length;
+            setSeries(nextIndex);
+        });
+
+        setSeries(currentSeriesIndex);
+
+        let currentX = 0;
+        let maxX = 0;
+        let stopScrollingTimer = null;
+
+        function updateBounds() {
+            const containerWidth = characterContainer.offsetWidth;
+            maxX = Math.max(0, window.innerWidth - containerWidth);
+            currentX = Math.min(Math.max(currentX, 0), maxX);
+            characterContainer.style.left = `${currentX}px`;
+        }
+
+        function moveCharacter(deltaY) {
+            const direction = deltaY < 0 ? 1 : -1;
+            const step = Math.min(60, Math.abs(deltaY)) * 0.7;
+            currentX += direction * step;
+            currentX = Math.min(Math.max(currentX, 0), maxX);
+            characterContainer.style.left = `${currentX}px`;
+            charImgElement.style.transform = direction === -1 ? 'scaleX(-1)' : 'scaleX(1)';
+        }
+
+        window.addEventListener('wheel', (event) => {
+            event.preventDefault();
+            moveCharacter(event.deltaY);
+            startWalking();
+
+            if (stopScrollingTimer !== null) {
+                clearTimeout(stopScrollingTimer);
+            }
+
+            stopScrollingTimer = setTimeout(() => {
+                stopWalking();
+            }, 150);
+        }, { passive: false });
+
+        window.addEventListener('resize', updateBounds);
+
+        window.addEventListener('load', () => {
+            currentX = (window.innerWidth - characterContainer.offsetWidth) / 2;
+            updateBounds();
+        });
+    </script>
+</body>
+</html>
