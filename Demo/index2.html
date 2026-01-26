@@ -261,6 +261,7 @@
             currentOffset: 0,
             startOffset: 0,
             endOffset: 0,
+            lineStep: 0,
             speed: 0,
             lastTimestamp: null,
             lastCenterIndex: -1
@@ -302,9 +303,13 @@
                         }
 
                         const lineHeight = lineElements[0].getBoundingClientRect().height;
-                        const overlayHeight = marqueeOverlay.getBoundingClientRect().height;
-                        marqueeState.startOffset = (overlayHeight / 2) - (lineHeight / 2);
-                        marqueeState.endOffset = marqueeState.startOffset - (lineHeight * (lineElements.length - 1));
+                        const lineStep = lineElements.length > 1
+                            ? lineElements[1].offsetTop - lineElements[0].offsetTop
+                            : lineHeight;
+                        const totalHeight = lineStep * (lineElements.length - 1) + lineHeight;
+                        marqueeState.lineStep = lineStep;
+                        marqueeState.startOffset = (totalHeight / 2) - (lineHeight / 2);
+                        marqueeState.endOffset = marqueeState.startOffset - (lineStep * (lineElements.length - 1));
                         marqueeState.currentOffset = marqueeState.startOffset;
                         marqueeState.speed = lineHeight / 1.1;
                         updateMarqueePosition();
@@ -339,8 +344,8 @@
             const lineElements = marqueeText.querySelectorAll('.marquee-line');
             if (!lineElements.length) return;
 
-            const lineHeight = lineElements[0].getBoundingClientRect().height;
-            const centerIndex = Math.round((marqueeState.startOffset - marqueeState.currentOffset) / lineHeight);
+            const lineStep = marqueeState.lineStep || lineElements[0].getBoundingClientRect().height;
+            const centerIndex = Math.round((marqueeState.startOffset - marqueeState.currentOffset) / lineStep);
             const clampedIndex = Math.min(Math.max(centerIndex, 0), lineElements.length - 1);
 
             if (marqueeState.lastCenterIndex !== clampedIndex) {
