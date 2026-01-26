@@ -25,6 +25,37 @@
             height: 100%;
         }
 
+        .hex-layer {
+            position: absolute;
+            width: 180px;
+            height: 160px;
+            background: rgba(255, 255, 255, 0.6);
+            opacity: 0.08;
+            clip-path: polygon(
+                50% 0%,
+                100% 25%,
+                100% 75%,
+                50% 100%,
+                0% 75%,
+                0% 25%
+            );
+            animation: hex-flicker 2.8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .hex-layer.top-left {
+            top: 20px;
+            left: 50px;
+            animation-delay: 0.4s;
+        }
+
+        .hex-layer.bottom-right {
+            right: 50px;
+            bottom: 50px;
+            animation-delay: 1.3s;
+        }
+
         #character-container {
             position: absolute;
             bottom: 18%;
@@ -61,10 +92,28 @@
         #series-toggle:hover {
             background: rgba(0, 0, 0, 0.9);
         }
+
+        @keyframes hex-flicker {
+            0%,
+            100% {
+                opacity: 0.04;
+            }
+            45% {
+                opacity: 0.2;
+            }
+            60% {
+                opacity: 0.08;
+            }
+            80% {
+                opacity: 0.16;
+            }
+        }
     </style>
 </head>
 <body>
     <div id="stage">
+        <div class="hex-layer top-left"></div>
+        <div class="hex-layer bottom-right"></div>
         <div id="character-container">
             <img id="character-img" src="" alt="Character">
         </div>
