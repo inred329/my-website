@@ -302,16 +302,25 @@
                             return;
                         }
 
-                        const lineHeight = lineElements[0].getBoundingClientRect().height;
-                        const lineStep = lineElements.length > 1
-                            ? lineElements[1].offsetTop - lineElements[0].offsetTop
-                            : lineHeight;
-                        const totalHeight = lineStep * (lineElements.length - 1) + lineHeight;
-                        marqueeState.lineStep = lineStep;
-                        marqueeState.startOffset = (totalHeight / 2) - (lineHeight / 2);
-                        marqueeState.endOffset = marqueeState.startOffset - (lineStep * (lineElements.length - 1));
+                        // 直接使用容器的實際高度，不需手動累加計算
+                        const containerHeight = marqueeText.offsetHeight;
+                        const firstLine = lineElements[0];
+                        const lastLine = lineElements[lineElements.length - 1];
+
+                        // 1. 設定起始位置：讓「第一行」的中心點對齊螢幕正中間
+                        // 公式：(容器半高) - (第一行的中心位置)
+                        const firstLineCenter = firstLine.offsetTop + (firstLine.offsetHeight / 2);
+                        marqueeState.startOffset = (containerHeight / 2) - firstLineCenter;
+
+                        // 2. 設定結束位置：讓「最後一行」捲到螢幕正中間後停止 (或是你可以自訂要捲過頭)
+                        const lastLineCenter = lastLine.offsetTop + (lastLine.offsetHeight / 2);
+                        marqueeState.endOffset = (containerHeight / 2) - lastLineCenter;
+
+                        // 3. 設定初始狀態
                         marqueeState.currentOffset = marqueeState.startOffset;
-                        marqueeState.speed = lineHeight / 1.1;
+                
+                        // 設定速度 (維持原本邏輯，用第一行高度當基準，或是你可以直接給定數值如 30)
+                        marqueeState.speed = firstLine.offsetHeight / 1.1;
                         updateMarqueePosition();
                         updateMarqueeCenterLine();
                         startMarqueeScroll();
@@ -341,19 +350,36 @@
         }
 
         function updateMarqueeCenterLine() {
+            // 取得所有文字行
             const lineElements = marqueeText.querySelectorAll('.marquee-line');
             if (!lineElements.length) return;
 
-            const lineStep = marqueeState.lineStep || lineElements[0].getBoundingClientRect().height;
-            const centerIndex = Math.round((marqueeState.startOffset - marqueeState.currentOffset) / lineStep);
-            const clampedIndex = Math.min(Math.max(centerIndex, 0), lineElements.length - 1);
+            // 計算目前捲動容器的「視覺中心點」在容器內部的 Y 座標
+            // 原理：容器本身被 translate(-50%, -50%) 置中，所以容器中心點 (offsetHeight / 2) 初始是對齊螢幕中心的
+            // 當加上 translateY(currentOffset) 後，實際對齊螢幕中心的點會往上移，所以要減去 currentOffset
+            const containerCenterY = (marqueeText.offsetHeight / 2) - marqueeState.currentOffset;
 
-            if (marqueeState.lastCenterIndex !== clampedIndex) {
-                if (lineElements[marqueeState.lastCenterIndex]) {
+            let closestIndex = -1;
+            let minDistance = Infinity;
+
+            // 遍歷每一行，找出中心點離 containerCenterY 最近的那一行
+            lineElements.forEach((el, index) => {
+                const elCenter = el.offsetTop + (el.offsetHeight / 2);
+                const dist = Math.abs(elCenter - containerCenterY);
+
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    closestIndex = index;
+                }
+            });
+
+            // 如果找到的行跟上一次不一樣，就更新樣式
+            if (closestIndex !== -1 && marqueeState.lastCenterIndex !== closestIndex) {
+                if (marqueeState.lastCenterIndex !== -1 && lineElements[marqueeState.lastCenterIndex]) {
                     lineElements[marqueeState.lastCenterIndex].classList.remove('is-center');
                 }
-                lineElements[clampedIndex].classList.add('is-center');
-                marqueeState.lastCenterIndex = clampedIndex;
+                lineElements[closestIndex].classList.add('is-center');
+                marqueeState.lastCenterIndex = closestIndex;
             }
         }
 
