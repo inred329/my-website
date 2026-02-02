@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U-Regenerative</title>
+    <style>
+        /* CSS 設定 */
+        :root {
+            --hover-width: 75%;
+            --other-width: 25%;
+            --transition-speed: 1000ms;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Arial Black', sans-serif;
+            background: #000; /* 背景改黑，避免影片載入前白屏 */
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .split {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: width var(--transition-speed) ease-in-out;
+        }
+
+        .split.left { left: 0; background: #111; }
+        .split.right { right: 0; background: #222; }
+
+        /* 影片設定：確保填滿且置中 */
+        .split video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 關鍵：裁切影片以填滿畫面 */
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.8;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.3);
+            pointer-events: none; /* 讓點擊穿透遮罩 */
+        }
+
+        /* 滑鼠互動邏輯 */
+        .split.left:hover { width: var(--hover-width); z-index: 10; }
+        
+        .container.hover-left .split.left { width: var(--hover-width); }
+        .container.hover-left .split.right { width: var(--other-width); }
+
+        .container.hover-right .split.right { width: var(--hover-width); }
+        .container.hover-right .split.left { width: var(--other-width); }
+
+        /* 中間內容 */
+        .center-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 20;
+            pointer-events: none;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 6rem;
+            color: #fff;
+            text-transform: uppercase;
+            margin: 0;
+            white-space: nowrap;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+        }
+
+        /* START 按鈕 */
+        .start-btn {
+            pointer-events: auto;
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 50px;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 50px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+
+        .start-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        /* 播放按鈕 */
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            color: white;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: 0.2s;
+            z-index: 15;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .play-btn:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+            color: #fff;
+            opacity: 1;
+        }
+
+        @media(max-width: 800px) {
+            h1 { font-size: 3rem; }
+            .split { width: 100%; height: 50%; }
+            .split.left { top: 0; }
+            .split.right { bottom: 0; top: auto; width: 100%; }
+            .container.hover-left .split.left, 
+            .container.hover-right .split.right { width: 100%; height: 75%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div class="split left">
+        <video id="videoLeft" src="videos/v2.mp4" loop muted playsinline></video>
+        <div class="overlay"></div>
+        <button class="play-btn" onclick="playVideo('videoLeft', this)">▶</button>
+    </div>
+
+    <div class="split right">
+        <video id="videoRight" src="videos/v1.mp4" loop muted playsinline></video>
+        <div class="overlay"></div>
+        <button class="play-btn" onclick="playVideo('videoRight', this)">▶</button>
+    </div>
+
+    <div class="center-content">
+        <h1>U-Regenerative</h1>
+        <a href="todo.html" class="start-btn">START</a>
+    </div>
+
+</div>
+
+<script>
+    const container = document.querySelector('.container');
+    const left = document.querySelector('.left');
+    const right = document.querySelector('.right');
+
+    // 滑鼠效果
+    left.addEventListener('mouseenter', () => container.classList.add('hover-left'));
+    left.addEventListener('mouseleave', () => container.classList.remove('hover-left'));
+    right.addEventListener('mouseenter', () => container.classList.add('hover-right'));
+    right.addEventListener('mouseleave', () => container.classList.remove('hover-right'));
+
+    // 影片播放控制
+    function playVideo(videoId, btn) {
+        const video = document.getElementById(videoId);
+        
+        if (video.paused) {
+            video.muted = false; // 嘗試開啟聲音
+            video.play()
+                .then(() => {
+                    btn.style.opacity = "0"; // 成功播放後隱藏按鈕
+                    // 如果滑鼠移開，讓按鈕再浮現的邏輯可選
+                })
+                .catch(error => {
+                    console.error("播放失敗:", error);
+                    alert("影片無法播放，可能是格式問題。");
+                });
+        } else {
+            video.pause();
+            btn.style.opacity = "1";
+        }
+    }
+</script>
+
+</body>
+</html>

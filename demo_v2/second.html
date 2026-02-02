@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walking Adventure - Final Level Transition</title>
+    <style>
+        /* =========================================
+           1. 基礎設定
+           ========================================= */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        #game-stage {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* =========================================
+           2. 背景與物件
+           ========================================= */
+        #background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: auto;
+            min-width: 200vw; 
+            background-image: url('images/green1.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            transition: transform 0.1s linear;
+            will-change: transform;
+        }
+
+        .scene-obj {
+            position: absolute;
+            bottom: 8%; 
+            z-index: 5;
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: bottom center;
+            filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.9));
+            transition: background-image 0.3s ease;
+        }
+
+        .scene-obj::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -30%); 
+            width: 400px; 
+            height: 400px; 
+            background: radial-gradient(circle, rgba(255, 255, 220, 0.6) 0%, rgba(255, 220, 100, 0.2) 40%, rgba(0, 0, 0, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            transition: background 0.5s ease;
+        }
+
+        body.water-level .scene-obj::before {
+            background: radial-gradient(circle, rgba(100, 200, 255, 0.6) 0%, rgba(50, 100, 220, 0.2) 40%, rgba(0, 0, 0, 0) 70%);
+        }
+
+        .obj-1 {
+            left: 33.333%; 
+            transform: translateX(-50%);
+            background-image: url('images/Fern1.svg'); 
+            width: 150px;  
+            height: 280px; 
+        }
+
+        .obj-2 {
+            left: 66.666%; 
+            transform: translateX(-50%);
+            background-image: url('images/Flower1.svg'); 
+            width: 200px;
+            height: 350px;
+        }
+
+        /* =========================================
+           3. 主角人物
+           ========================================= */
+        #character {
+            position: absolute;
+            bottom: 10%;
+            left: 0px;
+            width: 150px;
+            height: 150px;
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+            transition: left 0.1s linear;
+            z-index: 10;
+        }
+
+        .facing-left {
+            transform: scaleX(-1);
+        }
+
+        /* =========================================
+           4. 轉場波浪遮罩 (核彈級修正版)
+           ========================================= */
+        #transition-wave {
+            position: fixed;
+            top: 100%; /* 初始位置：螢幕下方 */
+            left: 0;
+            width: 100%;
+            
+            /* 🔴 修正 1：高度設為螢幕的 4 倍 (超級高) */
+            height: 400%; 
+            
+            background-image: url('images/Wave.png');
+            background-size: cover; 
+            background-position: center top; /* 從最上方開始畫浪花 */
+            
+            
+            z-index: 200; 
+            pointer-events: none; 
+            
+            transition: top 1.2s ease-in-out;
+        }
+
+        /* 🔴 修正 3：往上拉 300% */
+        /* 這會把上方 3/4 的部分 (包含透明浪花) 全部推出螢幕外 */
+        /* 只留下最底部最紮實的 1/4 海水蓋住螢幕 */
+        #transition-wave.covering {
+            top: -300%;
+        }
+
+        /* =========================================
+           5. 卡片系統
+           ========================================= */
+        #card-system {
+            position: absolute;
+            width: 1050px; 
+            height: 450px; 
+            z-index: 100;
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity 0.3s ease, top 0.1s linear, left 0.1s linear;
+        }
+        
+        #card-system.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #card-intro {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: auto;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+            pointer-events: auto;
+            z-index: 5;
+        }
+
+        .card {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: auto;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), z-index 0s;
+            filter: drop-shadow(-5px 5px 15px rgba(0,0,0,0.3));
+        }
+
+        .card.layer-1 {
+            z-index: 30;
+            transform: translateX(450px) scale(1);
+            filter: brightness(1) drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+        }
+
+        .card.layer-2 {
+            z-index: 20;
+            transform: translateX(535px) scale(0.95) translateY(15px); 
+            filter: brightness(0.9) drop-shadow(0 5px 10px rgba(0,0,0,0.2));
+        }
+
+        .card.layer-3 {
+            z-index: 10;
+            transform: translateX(620px) scale(0.9) translateY(30px);
+            filter: brightness(0.8);
+        }
+
+    </style>
+</head>
+<body id="main-body">
+
+<div id="game-stage">
+    <div id="background">
+        <div class="scene-obj obj-1"></div>
+        <div class="scene-obj obj-2"></div>
+    </div>
+    
+    <div id="character"></div>
+
+    <div id="card-system" class="hidden">
+        <img id="card-intro" src="images/cards-v2-white.png">
+        <img id="card-science" class="card" data-type="science" src="images/cards-v2-science1.png">
+        <img id="card-culture" class="card" data-type="culture" src="images/cards-v2-culture3.png">
+        <img id="card-nbs" class="card" data-type="NbS" src="images/cards-v2-NbS3.png">
+    </div>
+
+    <div id="transition-wave"></div>
+</div>
+
+<script>
+    // =========================================
+    // 1. 初始化與參數設定
+    // =========================================
+    const bodyEl = document.getElementById('main-body');
+    const charEl = document.getElementById('character');
+    const bgEl = document.getElementById('background');
+    const waveEl = document.getElementById('transition-wave');
+    const obj1El = document.querySelector('.obj-1');
+    const obj2El = document.querySelector('.obj-2');
+
+    let isWaterLevel = false;    
+    let isTransitioning = false; 
+
+    const walkImages = [];
+    for(let i=1; i<=6; i++) { const img = new Image(); img.src = `images/Walk${i}.svg`; walkImages.push(img.src); }
+
+    const swimImages = [];
+    for(let i=1; i<=7; i++) { const img = new Image(); img.src = `images/Swim${i}.svg`; swimImages.push(img.src); }
+
+    let currentSprites = walkImages;
+    let totalFrames = 6;
+
+    let charX = 0;
+    let bgX = 0;
+    let currentFrame = 0;
+    let isFacingRight = true;
+    
+    const walkSpeed = 25;
+    const thresholdRatio = 0.6; 
+
+    // =========================================
+    // 2. 卡片系統設定
+    // =========================================
+    const cardSystem = document.getElementById('card-system');
+    const cards = {
+        science: document.getElementById('card-science'),
+        culture: document.getElementById('card-culture'),
+        NbS: document.getElementById('card-nbs')
+    };
+
+    const cardImages = {
+        science: { active: 'images/cards-v2-science1.png', inactive: 'images/cards-v2-science3.png' },
+        culture: { active: 'images/cards-v2-culture1.png', inactive: 'images/cards-v2-culture3.png' },
+        NbS:     { active: 'images/cards-v2-NbS1.png',     inactive: 'images/cards-v2-NbS3.png' }
+    };
+
+    let cardOrder = ['science', 'culture', 'NbS'];
+
+    const gameObjects = [
+        { selector: '.obj-1' },
+        { selector: '.obj-2' }
+    ];
+
+    initGame();
+
+    function initGame() {
+        updateCharacterSprite();
+        updateCardVisuals();
+        Object.keys(cards).forEach(type => {
+            cards[type].addEventListener('click', (e) => {
+                e.stopPropagation();
+                bringToFront(type);
+            });
+        });
+    }
+
+    // =========================================
+    // 3. 核心遊戲迴圈
+    // =========================================
+    window.addEventListener('wheel', (e) => {
+        if (isTransitioning) return;
+
+        const stageWidth = window.innerWidth;
+        const bgWidth = bgEl.offsetWidth;
+        const maxBgScroll = -(bgWidth - stageWidth);
+        const threshold = stageWidth * thresholdRatio;
+        const direction = e.deltaY > 0 ? 1 : -1;
+
+        currentFrame = (currentFrame + 1) % totalFrames;
+        updateCharacterSprite();
+
+        if (direction === 1) { 
+            if (!isFacingRight) {
+                isFacingRight = true;
+                charEl.classList.remove('facing-left');
+            }
+            
+            if (!isWaterLevel && bgX <= maxBgScroll && charX >= stageWidth - 150) {
+                startLevelTransition();
+                return;
+            }
+
+            if (charX < threshold) {
+                charX += walkSpeed;
+            } else if (bgX > maxBgScroll) {
+                bgX -= walkSpeed;
+            } else {
+                if (charX < stageWidth - 100) charX += walkSpeed;
+            }
+
+        } else {
+            if (isFacingRight) {
+                isFacingRight = false;
+                charEl.classList.add('facing-left');
+            }
+            if (bgX < 0 && charX <= threshold + walkSpeed) { 
+                bgX += walkSpeed;
+            } else if (charX > 0) {
+                charX -= walkSpeed;
+            }
+        }
+
+        render();
+        checkCollision();
+    });
+
+
+    // =========================================
+    // 4. 轉場邏輯 (含緩衝時間)
+    // =========================================
+    function startLevelTransition() {
+        console.log("🌊 開始進入水下關卡...");
+        isTransitioning = true;
+        hideCards();
+
+        // 1. 波浪向上 (1.2s)
+        waveEl.classList.add('covering');
+
+        // 等待動畫跑完 (1.4s)
+        setTimeout(() => {
+            
+            // === 換圖 ===
+            isWaterLevel = true;
+            bodyEl.classList.add('water-level');
+
+            bgEl.style.backgroundImage = "url('images/blue1.png')";
+            obj1El.style.backgroundImage = "url('images/Jellyfish1.svg')";
+            obj2El.style.backgroundImage = "url('images/Fishes1.svg')";
+
+            currentSprites = swimImages;
+            totalFrames = 7;
+            currentFrame = 0;
+            updateCharacterSprite();
+
+            charX = 0;
+            bgX = 0;
+            render();
+
+            console.log("✅ 場景替換完成");
+
+            // 停留 0.5 秒確保蓋好
+            setTimeout(() => {
+                
+                // 2. 波浪向下
+                waveEl.classList.remove('covering');
+
+                setTimeout(() => {
+                    isTransitioning = false;
+                    console.log("✨ 轉場結束");
+                }, 1200);
+
+            }, 500); 
+
+        }, 1400); 
+    }
+
+
+    // =========================================
+    // 5. 輔助函式庫
+    // =========================================
+    function updateCharacterSprite() {
+        charEl.style.backgroundImage = `url('${currentSprites[currentFrame]}')`;
+    }
+
+    function render() {
+        charEl.style.left = `${charX}px`;
+        bgEl.style.transform = `translateX(${bgX}px)`;
+    }
+
+    function bringToFront(clickedType) {
+        if (cardOrder[0] === clickedType) return;
+        cardOrder = cardOrder.filter(type => type !== clickedType);
+        cardOrder.unshift(clickedType);
+        updateCardVisuals();
+    }
+
+    function updateCardVisuals() {
+        cardOrder.forEach((type, index) => {
+            const el = cards[type];
+            el.className = `card layer-${index + 1}`;
+            if (index === 0) {
+                el.src = cardImages[type].active;
+            } else {
+                el.src = cardImages[type].inactive;
+            }
+        });
+    }
+
+    function checkCollision() {
+        const charRect = charEl.getBoundingClientRect();
+        let hasHit = false;
+        let targetRect = null;
+
+        gameObjects.forEach(obj => {
+            const el = document.querySelector(obj.selector);
+            if (!el) return;
+
+            const objRect = el.getBoundingClientRect();
+            const isColliding = (
+                charRect.right > objRect.left + 50 &&
+                charRect.left < objRect.right - 50
+            );
+
+            if (isColliding) {
+                hasHit = true;
+                targetRect = objRect;
+            }
+        });
+
+        if (hasHit && targetRect) {
+            showCards(targetRect);
+        } else {
+            hideCards();
+        }
+    }
+
+    function showCards(rect) {
+        cardSystem.classList.remove('hidden');
+        const leftPos = rect.left + (rect.width / 2) - (1050 / 2); 
+        const topPos = rect.top - 450 + 80; 
+        cardSystem.style.left = `${leftPos}px`;
+        cardSystem.style.top = `${topPos}px`;
+    }
+
+    function hideCards() {
+        cardSystem.classList.add('hidden');
+    }
+
+</script>
+
+</body>
+</html>
