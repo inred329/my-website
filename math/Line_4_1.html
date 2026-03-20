@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4-1 直線方程式及其圖形</title>
+    <link rel="stylesheet" href="lesson.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="lesson-body">
+    <div class="lesson-shell">
+        <header class="lesson-hero">
+            <p class="eyebrow">第 4 章・4-1</p>
+            <h1>直線方程式及其圖形</h1>
+            <p>平面座標把幾何和代數接起來。只要知道斜率和一個點，我們就能寫出直線方程式，也能讀出圖形的方向。</p>
+            <p><a href="index.html">回到首頁</a></p>
+        </header>
+        <div class="lesson-grid">
+            <main class="panel">
+                <h2>三種常見形式</h2>
+                <div class="cards">
+                    <div class="card"><strong>斜截式</strong>$y=mx+b$，$m$ 是斜率，$b$ 是 y 截距。</div>
+                    <div class="card"><strong>點斜式</strong>$y-y_1=m(x-x_1)$，適合已知一點和斜率。</div>
+                    <div class="card"><strong>一般式</strong>$Ax+By+C=0$，整理計算時很常用。</div>
+                </div>
+                <div class="formula-box">
+                    <h3>斜率公式</h3>
+                    <p>過兩點 $(x_1,y_1)$、$(x_2,y_2)$ 的直線，其斜率為</p>
+                    <p>$m=\dfrac{y_2-y_1}{x_2-x_1}$</p>
+                </div>
+                <div class="example-box">
+                    <h3>例題</h3>
+                    <p>過 $(1,2)$ 且斜率為 $3$ 的直線：</p>
+                    <p>$y-2=3(x-1)$</p>
+                    <p>$y=3x-1$</p>
+                </div>
+            </main>
+            <aside class="panel">
+                <h2>用圖看斜率</h2>
+                <div class="visual-frame">
+                    <svg viewBox="0 0 560 300" aria-label="直線斜率示意圖">
+                        <line x1="60" y1="240" x2="500" y2="240" stroke="#334155" stroke-width="4"></line>
+                        <line x1="140" y1="40" x2="140" y2="270" stroke="#334155" stroke-width="4"></line>
+                        <line x1="80" y1="250" x2="460" y2="70" stroke="#2563eb" stroke-width="6"></line>
+                        <circle cx="200" cy="194" r="8" fill="#ef4444"></circle>
+                        <circle cx="320" cy="134" r="8" fill="#ef4444"></circle>
+                        <path d="M200 194 H320" stroke="#0ea5a4" stroke-width="5" stroke-dasharray="10 8"></path>
+                        <path d="M320 194 V134" stroke="#f59e0b" stroke-width="5" stroke-dasharray="10 8"></path>
+                        <text x="260" y="184" text-anchor="middle" font-size="18" fill="#0f766e">run = 2</text>
+                        <text x="338" y="164" font-size="18" fill="#b45309">rise = 1</text>
+                        <text x="360" y="98" font-size="20" fill="#1d4ed8">斜率 m = 1/2</text>
+                    </svg>
+                    <p class="caption">斜率就是向右走多少、向上升多少的比值。走一樣遠，升得越快，斜率就越大。</p>
+                </div>
+                <section class="quiz-box">
+                    <h3>互動練習 1：求斜率</h3>
+                    <div id="quiz1-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="q1-top">分子</label>
+                        <input id="q1-top" type="number">
+                        <label for="q1-bottom">分母</label>
+                        <input id="q1-bottom" type="number">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz1()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz1()">換一題</button>
+                    </div>
+                    <div id="quiz1-feedback" class="feedback"></div>
+                </section>
+                <section class="quiz-box">
+                    <h3>互動練習 2：y 截距</h3>
+                    <div id="quiz2-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="q2-answer">答案</label>
+                        <input id="q2-answer" type="number">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz2()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz2()">換一題</button>
+                    </div>
+                    <div id="quiz2-feedback" class="feedback"></div>
+                </section>
+            </aside>
+        </div>
+        <p class="lesson-footer">學會用方程式描述直線後，後面的平行、垂直和距離題會輕鬆很多。</p>
+    </div>
+    <script src="lesson.js"></script>
+    <script>
+        let quiz1 = { top: 0, bottom: 1 };
+        let answer2 = 0;
+        function gcd(a, b) {
+            return b === 0 ? Math.abs(a) : gcd(b, a % b);
+        }
+        function generateQuiz1() {
+            const x1 = lessonUtils.randomInt(-2, 2);
+            const y1 = lessonUtils.randomInt(-2, 3);
+            const dx = lessonUtils.randomInt(1, 4);
+            const dy = lessonUtils.pick([-4, -3, -2, 1, 2, 3, 4]);
+            const x2 = x1 + dx;
+            const y2 = y1 + dy;
+            const g = gcd(dy, dx);
+            quiz1 = { top: dy / g, bottom: dx / g };
+            document.getElementById("quiz1-question").innerHTML = `求過 $( ${x1}, ${y1} )$ 與 $( ${x2}, ${y2} )$ 的直線斜率。請填最簡分數。`;
+            lessonUtils.resetInputs(["q1-top", "q1-bottom"]);
+            lessonUtils.clearFeedback("quiz1-feedback");
+        }
+        function checkQuiz1() {
+            const top = Number(document.getElementById("q1-top").value);
+            const bottom = Number(document.getElementById("q1-bottom").value);
+            const ok = top === quiz1.top && bottom === quiz1.bottom;
+            lessonUtils.setFeedback("quiz1-feedback", ok, ok ? "答對了，斜率就是升高量除以水平位移。" : `答案是 ${quiz1.top}/${quiz1.bottom}。`);
+        }
+        function generateQuiz2() {
+            const m = lessonUtils.pick([-3, -2, -1, 1, 2, 3]);
+            const x = lessonUtils.randomInt(-2, 4);
+            const y = lessonUtils.randomInt(-5, 5);
+            answer2 = y - m * x;
+            document.getElementById("quiz2-question").innerHTML = `直線斜率為 ${m}，且通過點 $( ${x}, ${y} )$。寫成 $y=${m}x+b$ 時，$b$ 是多少？`;
+            lessonUtils.resetInputs(["q2-answer"]);
+            lessonUtils.clearFeedback("quiz2-feedback");
+            lessonUtils.refreshMath();
+        }
+        function checkQuiz2() {
+            const guess = Number(document.getElementById("q2-answer").value);
+            lessonUtils.setFeedback("quiz2-feedback", guess === answer2, guess === answer2 ? "很好，你會把點代回去求截距了。" : `把點代入 $y=mx+b$，可得 $b=${answer2}$。`);
+            lessonUtils.refreshMath();
+        }
+        generateQuiz1();
+        generateQuiz2();
+    </script>
+</body>
+</html>

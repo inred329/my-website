@@ -1,0 +1,270 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-1 多項式的運算與應用</title>
+    <link rel="stylesheet" href="lesson.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="lesson-body">
+    <div class="lesson-shell">
+        <header class="lesson-hero">
+            <p class="eyebrow">第 3 章・3-1</p>
+            <h1>多項式的運算與應用</h1>
+            <p>這一節會先認識多項式的結構，再練習加法、減法與同類項合併。把每一項看清楚，運算就會變得很有條理。</p>
+            <p><a href="index.html">回到首頁</a></p>
+        </header>
+
+        <div class="lesson-grid">
+            <main class="panel">
+                <h2>先認識多項式長什麼樣</h2>
+                <ul class="concept-list">
+                    <li>多項式由很多「項」組成，每一項都包含係數、文字與次方。</li>
+                    <li>像 $3x^2 + 5x - 7$，其中 $3x^2$、$5x$、$-7$ 都是項。</li>
+                    <li>只有相同次方的項，才能合併成同類項。</li>
+                </ul>
+
+                <div class="cards">
+                    <div class="card">
+                        <strong>係數</strong>
+                        例如在 $3x^2$ 中，3 就是係數。
+                    </div>
+                    <div class="card">
+                        <strong>次方</strong>
+                        例如在 $x^2$ 中，2 表示二次。
+                    </div>
+                    <div class="card">
+                        <strong>常數項</strong>
+                        沒有文字的項叫常數項，例如 $-7$。
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <h3>加減法的核心規則</h3>
+                    <p>同類項才能合併，例如 $2x^2 + 5x^2 = 7x^2$。</p>
+                    <p>做減法時，要先把後面整個多項式看成加上它的相反數。</p>
+                </div>
+
+                <div class="example-box">
+                    <h3>例題 1：多項式加法</h3>
+                    <p>$(2x^2 + 3x + 5) + (4x^2 - x + 1)$</p>
+                    <p>把同類項排在一起：$(2+4)x^2 + (3-1)x + (5+1)$</p>
+                    <p>答案是 $6x^2 + 2x + 6$。</p>
+                </div>
+
+                <div class="example-box">
+                    <h3>例題 2：多項式減法</h3>
+                    <p>$(5x^2 + 2x + 8) - (3x^2 - 4x + 1)$</p>
+                    <p>先變號：$(5x^2 + 2x + 8) + (-3x^2 + 4x - 1)$</p>
+                    <p>再合併同類項，得到 $2x^2 + 6x + 7$。</p>
+                </div>
+
+                <div class="summary-box">
+                    <h3>解題提醒</h3>
+                    <ul class="tip-list">
+                        <li>看見括號時，先處理符號，再合併項。</li>
+                        <li>$x^2$ 和 $x$ 不是同類項，不能相加。</li>
+                        <li>整理答案時，通常依次方由高到低排列。</li>
+                    </ul>
+                </div>
+            </main>
+
+            <aside class="panel">
+                <h2>用圖看同類項合併</h2>
+                <div class="visual-frame">
+                    <svg viewBox="0 0 560 320" aria-label="多項式同類項示意圖">
+                        <rect x="70" y="52" width="120" height="74" rx="18" fill="#dbeafe" stroke="#2563eb" stroke-width="4"></rect>
+                        <text x="130" y="97" text-anchor="middle" font-size="26" fill="#1d4ed8">2x²</text>
+                        <rect x="215" y="52" width="120" height="74" rx="18" fill="#dbeafe" stroke="#2563eb" stroke-width="4"></rect>
+                        <text x="275" y="97" text-anchor="middle" font-size="26" fill="#1d4ed8">4x²</text>
+                        <rect x="360" y="52" width="120" height="74" rx="18" fill="#ecfeff" stroke="#0f766e" stroke-width="4"></rect>
+                        <text x="420" y="97" text-anchor="middle" font-size="26" fill="#0f766e">3x</text>
+
+                        <rect x="142" y="188" width="120" height="74" rx="18" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="4"></rect>
+                        <text x="202" y="233" text-anchor="middle" font-size="28" fill="#1d4ed8">6x²</text>
+                        <rect x="300" y="188" width="120" height="74" rx="18" fill="#ccfbf1" stroke="#0f766e" stroke-width="4"></rect>
+                        <text x="360" y="233" text-anchor="middle" font-size="28" fill="#0f766e">2x</text>
+
+                        <path d="M130 136 Q166 164 202 184" fill="none" stroke="#2563eb" stroke-width="5" stroke-dasharray="10 8"></path>
+                        <path d="M275 136 Q238 164 202 184" fill="none" stroke="#2563eb" stroke-width="5" stroke-dasharray="10 8"></path>
+                        <path d="M420 136 Q390 164 360 184" fill="none" stroke="#0f766e" stroke-width="5" stroke-dasharray="10 8"></path>
+
+                        <text x="280" y="292" text-anchor="middle" font-size="20" fill="#475569">顏色相同代表同類項，可以合併；不同顏色不能混在一起。</text>
+                    </svg>
+                    <p class="caption">把相同次方的項想成同一類積木，先分類再加減，計算會很穩定。</p>
+                </div>
+
+                <section class="quiz-box">
+                    <h3>互動練習 1：找係數</h3>
+                    <div id="quiz1-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="q1-x2">$x^2$ 係數</label>
+                        <input id="q1-x2" type="number">
+                        <label for="q1-x">$x$ 係數</label>
+                        <input id="q1-x" type="number">
+                        <label for="q1-c">常數項</label>
+                        <input id="q1-c" type="number">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz1()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz1()">換一題</button>
+                    </div>
+                    <div id="quiz1-feedback" class="feedback"></div>
+                </section>
+
+                <section class="quiz-box">
+                    <h3>互動練習 2：多項式加法</h3>
+                    <div id="quiz2-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="q2-x2">$x^2$ 係數</label>
+                        <input id="q2-x2" type="number">
+                        <label for="q2-x">$x$ 係數</label>
+                        <input id="q2-x" type="number">
+                        <label for="q2-c">常數項</label>
+                        <input id="q2-c" type="number">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz2()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz2()">換一題</button>
+                    </div>
+                    <div id="quiz2-feedback" class="feedback"></div>
+                </section>
+
+                <section class="quiz-box">
+                    <h3>互動練習 3：多項式減法</h3>
+                    <div id="quiz3-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="q3-x2">$x^2$ 係數</label>
+                        <input id="q3-x2" type="number">
+                        <label for="q3-x">$x$ 係數</label>
+                        <input id="q3-x" type="number">
+                        <label for="q3-c">常數項</label>
+                        <input id="q3-c" type="number">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz3()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz3()">換一題</button>
+                    </div>
+                    <div id="quiz3-feedback" class="feedback"></div>
+                </section>
+            </aside>
+        </div>
+
+        <p class="lesson-footer">把每一項看清楚、把符號處理好，多項式運算就會變成很規律的整理題。</p>
+    </div>
+
+    <script src="lesson.js"></script>
+    <script>
+        function formatPolynomial(coeffs) {
+            const parts = [];
+
+            if (coeffs.x2 !== 0) {
+                if (coeffs.x2 === 1) parts.push("x^2");
+                else if (coeffs.x2 === -1) parts.push("-x^2");
+                else parts.push(`${coeffs.x2}x^2`);
+            }
+
+            if (coeffs.x !== 0) {
+                let value = "";
+                if (coeffs.x === 1) value = "x";
+                else if (coeffs.x === -1) value = "-x";
+                else value = `${coeffs.x}x`;
+                parts.push(value);
+            }
+
+            if (coeffs.c !== 0 || parts.length === 0) {
+                parts.push(`${coeffs.c}`);
+            }
+
+            return parts
+                .map((part, index) => {
+                    if (index === 0) {
+                        return part;
+                    }
+                    return part.startsWith("-") ? `- ${part.slice(1)}` : `+ ${part}`;
+                })
+                .join(" ");
+        }
+
+        let quiz1Answer = { x2: 0, x: 0, c: 0 };
+        let quiz2Answer = { x2: 0, x: 0, c: 0 };
+        let quiz3Answer = { x2: 0, x: 0, c: 0 };
+
+        function randomQuadratic() {
+            const x2 = lessonUtils.pick([-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]);
+            const x = lessonUtils.randomInt(-6, 6);
+            const c = lessonUtils.randomInt(-8, 8);
+            return { x2, x, c };
+        }
+
+        function generateQuiz1() {
+            quiz1Answer = randomQuadratic();
+            document.getElementById("quiz1-question").innerHTML = `請找出多項式 $${formatPolynomial(quiz1Answer)}$ 的各項係數。`;
+            lessonUtils.resetInputs(["q1-x2", "q1-x", "q1-c"]);
+            lessonUtils.clearFeedback("quiz1-feedback");
+            lessonUtils.refreshMath();
+        }
+
+        function checkQuiz1() {
+            const x2 = Number(document.getElementById("q1-x2").value);
+            const x = Number(document.getElementById("q1-x").value);
+            const c = Number(document.getElementById("q1-c").value);
+            const ok = x2 === quiz1Answer.x2 && x === quiz1Answer.x && c === quiz1Answer.c;
+            lessonUtils.setFeedback("quiz1-feedback", ok, ok ? "答對了，你有把每一項拆清楚。" : `再看一次項和次方，答案是 (${quiz1Answer.x2}, ${quiz1Answer.x}, ${quiz1Answer.c})。`);
+        }
+
+        function generateQuiz2() {
+            const p1 = randomQuadratic();
+            const p2 = randomQuadratic();
+            quiz2Answer = {
+                x2: p1.x2 + p2.x2,
+                x: p1.x + p2.x,
+                c: p1.c + p2.c
+            };
+            document.getElementById("quiz2-question").innerHTML = `計算：$(${formatPolynomial(p1)}) + (${formatPolynomial(p2)})$`;
+            lessonUtils.resetInputs(["q2-x2", "q2-x", "q2-c"]);
+            lessonUtils.clearFeedback("quiz2-feedback");
+            lessonUtils.refreshMath();
+        }
+
+        function checkQuiz2() {
+            const x2 = Number(document.getElementById("q2-x2").value);
+            const x = Number(document.getElementById("q2-x").value);
+            const c = Number(document.getElementById("q2-c").value);
+            const ok = x2 === quiz2Answer.x2 && x === quiz2Answer.x && c === quiz2Answer.c;
+            lessonUtils.setFeedback("quiz2-feedback", ok, ok ? "很好，同類項合併正確。" : `先把相同次方排一起，答案是 ${formatPolynomial(quiz2Answer)}。`);
+        }
+
+        function generateQuiz3() {
+            const p1 = randomQuadratic();
+            const p2 = randomQuadratic();
+            quiz3Answer = {
+                x2: p1.x2 - p2.x2,
+                x: p1.x - p2.x,
+                c: p1.c - p2.c
+            };
+            document.getElementById("quiz3-question").innerHTML = `計算：$(${formatPolynomial(p1)}) - (${formatPolynomial(p2)})$`;
+            lessonUtils.resetInputs(["q3-x2", "q3-x", "q3-c"]);
+            lessonUtils.clearFeedback("quiz3-feedback");
+            lessonUtils.refreshMath();
+        }
+
+        function checkQuiz3() {
+            const x2 = Number(document.getElementById("q3-x2").value);
+            const x = Number(document.getElementById("q3-x").value);
+            const c = Number(document.getElementById("q3-c").value);
+            const ok = x2 === quiz3Answer.x2 && x === quiz3Answer.x && c === quiz3Answer.c;
+            lessonUtils.setFeedback("quiz3-feedback", ok, ok ? "答對了，變號和合併都做對了。" : `先把後面括號變號，答案是 ${formatPolynomial(quiz3Answer)}。`);
+        }
+
+        generateQuiz1();
+        generateQuiz2();
+        generateQuiz3();
+    </script>
+</body>
+</html>

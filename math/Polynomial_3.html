@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-3 多項式函數的圖形與多項式不等式</title>
+    <link rel="stylesheet" href="lesson.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="lesson-body">
+    <div class="lesson-shell">
+        <header class="lesson-hero">
+            <p class="eyebrow">第 3 章・3-3</p>
+            <h1>多項式函數的圖形與多項式不等式</h1>
+            <p>這一節會把圖形和不等式連起來。你不只要知道根在哪裡，還要知道在哪些區間函數值為正、在哪些區間為負。</p>
+            <p><a href="index.html">回到首頁</a></p>
+        </header>
+        <div class="lesson-grid">
+            <main class="panel">
+                <h2>解多項式不等式的基本流程</h2>
+                <ol class="concept-list">
+                    <li>先把式子整理成一邊為 0。</li>
+                    <li>找出方程式的根，把數線切成幾個區間。</li>
+                    <li>用測試點或圖形判斷每個區間的正負。</li>
+                    <li>依題目條件選出符合的區間。</li>
+                </ol>
+                <div class="example-box">
+                    <h3>例題：解 $(x-2)(x+1) &gt; 0$</h3>
+                    <p>根為 $x=-1$ 與 $x=2$。</p>
+                    <p>區間分成 $(-\infty,-1)$、$(-1,2)$、$(2,\infty)$。</p>
+                    <p>測試可知兩側為正，中間為負，所以解為 $x&lt;-1$ 或 $x&gt;2$。</p>
+                </div>
+                <div class="summary-box">
+                    <h3>觀念提醒</h3>
+                    <ul class="tip-list">
+                        <li>乘積大於 0 代表各因式同號。</li>
+                        <li>根是圖形與 x 軸交會的位置，也是正負切換的可能點。</li>
+                        <li>如果是不等號含等號，例如 $\geq 0$，根本身也要考慮進去。</li>
+                    </ul>
+                </div>
+            </main>
+            <aside class="panel">
+                <h2>用符號表看區間正負</h2>
+                <div class="visual-frame">
+                    <svg viewBox="0 0 560 260" aria-label="多項式不等式符號表">
+                        <line x1="80" y1="110" x2="500" y2="110" stroke="#334155" stroke-width="4"></line>
+                        <line x1="200" y1="92" x2="200" y2="128" stroke="#334155" stroke-width="3"></line>
+                        <line x1="360" y1="92" x2="360" y2="128" stroke="#334155" stroke-width="3"></line>
+                        <text x="200" y="150" text-anchor="middle" font-size="18">-1</text>
+                        <text x="360" y="150" text-anchor="middle" font-size="18">2</text>
+                        <text x="120" y="82" text-anchor="middle" font-size="28" fill="#16a34a">+</text>
+                        <text x="280" y="82" text-anchor="middle" font-size="28" fill="#dc2626">-</text>
+                        <text x="440" y="82" text-anchor="middle" font-size="28" fill="#16a34a">+</text>
+                        <path d="M120 190 H440" stroke="#f59e0b" stroke-width="8" stroke-linecap="round"></path>
+                        <circle cx="200" cy="190" r="9" fill="#fff" stroke="#f59e0b" stroke-width="4"></circle>
+                        <circle cx="360" cy="190" r="9" fill="#fff" stroke="#f59e0b" stroke-width="4"></circle>
+                        <text x="280" y="225" text-anchor="middle" font-size="20" fill="#92400e">選正號區間：左邊和右邊</text>
+                    </svg>
+                    <p class="caption">根把數線切開之後，每一段只要測一個點就夠了。因為在根之間，函數的正負不會亂跳。</p>
+                </div>
+                <section class="quiz-box">
+                    <h3>互動練習 1：判斷正負</h3>
+                    <div id="quiz1-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="q1-answer">填入正、負或零</label>
+                        <input id="q1-answer" type="text">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz1()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz1()">換一題</button>
+                    </div>
+                    <div id="quiz1-feedback" class="feedback"></div>
+                </section>
+                <section class="quiz-box">
+                    <h3>互動練習 2：解的區間數量</h3>
+                    <div id="quiz2-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="q2-answer">共有幾段區間</label>
+                        <input id="q2-answer" type="number">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz2()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz2()">換一題</button>
+                    </div>
+                    <div id="quiz2-feedback" class="feedback"></div>
+                </section>
+            </aside>
+        </div>
+        <p class="lesson-footer">不等式其實是在問「圖形在哪些地方位於 x 軸上方或下方」。</p>
+    </div>
+    <script src="lesson.js"></script>
+    <script>
+        let answer1 = "";
+        let answer2 = 0;
+        function generateQuiz1() {
+            const x = lessonUtils.pick([-3, -2, 0, 1, 3, 4]);
+            const value = (x - 2) * (x + 1);
+            answer1 = value > 0 ? "正" : (value < 0 ? "負" : "零");
+            document.getElementById("quiz1-question").innerHTML = `當 $x=${x}$ 時，$(x-2)(x+1)$ 的值是正、負，還是零？`;
+            lessonUtils.resetInputs(["q1-answer"]);
+            lessonUtils.clearFeedback("quiz1-feedback");
+            lessonUtils.refreshMath();
+        }
+        function checkQuiz1() {
+            const guess = document.getElementById("q1-answer").value.trim();
+            lessonUtils.setFeedback("quiz1-feedback", guess === answer1, guess === answer1 ? "判斷正確，先看兩個因式的符號很有用。" : `這一題的答案是「${answer1}」。`);
+        }
+        function generateQuiz2() {
+            const item = lessonUtils.pick([
+                { text: "$(x-3)(x+2) > 0$", value: 2 },
+                { text: "$(x-1)^2 < 0$", value: 0 },
+                { text: "$(x-4)^2 > 0$", value: 2 }
+            ]);
+            answer2 = item.value;
+            document.getElementById("quiz2-question").innerHTML = `方程 ${item.text} 的解集共有幾段區間？`;
+            lessonUtils.resetInputs(["q2-answer"]);
+            lessonUtils.clearFeedback("quiz2-feedback");
+            lessonUtils.refreshMath();
+        }
+        function checkQuiz2() {
+            const guess = Number(document.getElementById("q2-answer").value);
+            lessonUtils.setFeedback("quiz2-feedback", guess === answer2, guess === answer2 ? "很好，你有把根和區間切分想清楚。" : `再依根把數線分段，這題答案是 ${answer2}。`);
+        }
+        generateQuiz1();
+        generateQuiz2();
+    </script>
+</body>
+</html>

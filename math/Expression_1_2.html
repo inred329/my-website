@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1-2 式的運算</title>
+    <link rel="stylesheet" href="lesson.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="lesson-body">
+    <div class="lesson-shell">
+        <header class="lesson-hero">
+            <p class="eyebrow">第 1 章・1-2</p>
+            <h1>式的運算</h1>
+            <p>這一節的主角是代數式。你會練到同類項合併、去括號、代入計算，這些技巧是往後所有函數與方程式的基礎。</p>
+            <p><a href="index.html">回到首頁</a></p>
+        </header>
+        <div class="lesson-grid">
+            <main class="panel">
+                <h2>先記住運算規則</h2>
+                <ul class="concept-list">
+                    <li>只有同類項才能合併，例如 $3x + 2x = 5x$，但 $3x + 2y$ 不能合併。</li>
+                    <li>去括號時，括號前是負號代表每一項都要變號。</li>
+                    <li>代入數值時，要先看清楚變數與次方，例如 $x^2$ 和 $2x$ 完全不同。</li>
+                </ul>
+                <div class="formula-box">
+                    <h3>重點公式</h3>
+                    <p>$a(b+c)=ab+ac$，這叫做分配律。</p>
+                    <p>$-(a-b+c)=-a+b-c$，去括號時要連符號一起處理。</p>
+                </div>
+                <div class="example-box">
+                    <h3>例題</h3>
+                    <p>化簡 $3(2x-1)+4x$：</p>
+                    <p>$=6x-3+4x$</p>
+                    <p>$=10x-3$</p>
+                    <p>如果再代入 $x=2$，就得到 $10(2)-3=17$。</p>
+                </div>
+                <div class="summary-box">
+                    <h3>常見失誤</h3>
+                    <ul class="tip-list">
+                        <li>把 $x$ 和 $x^2$ 當成同類項。</li>
+                        <li>負號只改第一項，忘記整個括號都要變號。</li>
+                        <li>代入時忘了加括號，像 $x=-2$ 時，$x^2$ 應是 $(-2)^2$。</li>
+                    </ul>
+                </div>
+            </main>
+            <aside class="panel">
+                <h2>用圖看分配律</h2>
+                <div class="visual-frame">
+                    <svg viewBox="0 0 560 280" aria-label="分配律示意圖">
+                        <rect x="70" y="45" width="320" height="170" rx="18" fill="#dbeafe" stroke="#2563eb" stroke-width="4"></rect>
+                        <line x1="210" y1="45" x2="210" y2="215" stroke="#2563eb" stroke-width="4" stroke-dasharray="10 10"></line>
+                        <text x="230" y="28" text-anchor="middle" font-size="22" fill="#1d4ed8">2x</text>
+                        <text x="325" y="28" text-anchor="middle" font-size="22" fill="#1d4ed8">1</text>
+                        <text x="36" y="135" text-anchor="middle" font-size="22" fill="#0f766e">3</text>
+                        <text x="150" y="140" text-anchor="middle" font-size="28" fill="#0f172a">6x</text>
+                        <text x="300" y="140" text-anchor="middle" font-size="28" fill="#0f172a">3</text>
+                        <rect x="405" y="90" width="95" height="95" rx="18" fill="#ccfbf1" stroke="#0f766e" stroke-width="4"></rect>
+                        <text x="452" y="146" text-anchor="middle" font-size="28" fill="#115e59">+4x</text>
+                        <text x="282" y="255" text-anchor="middle" font-size="26" fill="#b45309">3(2x+1) + 4x = 6x + 3 + 4x</text>
+                    </svg>
+                    <p class="caption">把 3 視為高度，括號內的每一項都是寬度，長方形面積自然拆成兩塊，這就是分配律。</p>
+                </div>
+                <section class="quiz-box">
+                    <h3>互動練習 1：化簡式子</h3>
+                    <div id="quiz1-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="q1-x">x 的係數</label>
+                        <input id="q1-x" type="number">
+                        <label for="q1-c">常數</label>
+                        <input id="q1-c" type="number">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz1()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz1()">換一題</button>
+                    </div>
+                    <div id="quiz1-feedback" class="feedback"></div>
+                </section>
+                <section class="quiz-box">
+                    <h3>互動練習 2：代入求值</h3>
+                    <div id="quiz2-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="q2-answer">答案</label>
+                        <input id="q2-answer" type="number">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz2()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz2()">換一題</button>
+                    </div>
+                    <div id="quiz2-feedback" class="feedback"></div>
+                </section>
+            </aside>
+        </div>
+        <p class="lesson-footer">式的運算熟了，後面解方程式和處理函數就會順很多。</p>
+    </div>
+    <script src="lesson.js"></script>
+    <script>
+        let quiz1 = { x: 0, c: 0 };
+        let quiz2Answer = 0;
+        function generateQuiz1() {
+            const a = lessonUtils.randomInt(2, 5);
+            const b = lessonUtils.randomInt(-4, 5);
+            const c = lessonUtils.randomInt(-6, 6);
+            const d = lessonUtils.randomInt(-6, 6);
+            quiz1 = { x: a + c, c: a * b + d };
+            document.getElementById("quiz1-question").innerHTML = `化簡：$${a}(x ${b >= 0 ? "+" : "-"} ${Math.abs(b)}) ${c >= 0 ? "+" : "-"} ${Math.abs(c)}x ${d >= 0 ? "+" : "-"} ${Math.abs(d)}$`;
+            lessonUtils.resetInputs(["q1-x", "q1-c"]);
+            lessonUtils.clearFeedback("quiz1-feedback");
+            lessonUtils.refreshMath();
+        }
+        function checkQuiz1() {
+            const x = Number(document.getElementById("q1-x").value);
+            const c = Number(document.getElementById("q1-c").value);
+            const ok = x === quiz1.x && c === quiz1.c;
+            lessonUtils.setFeedback("quiz1-feedback", ok, ok ? "答對了，去括號和合併同類項都做對了。" : `正確結果是 ${quiz1.x}x ${quiz1.c >= 0 ? "+" : "-"} ${Math.abs(quiz1.c)}。`);
+        }
+        function generateQuiz2() {
+            const a = lessonUtils.randomInt(-4, 4) || 2;
+            const b = lessonUtils.randomInt(-6, 6);
+            const x = lessonUtils.randomInt(-3, 4);
+            quiz2Answer = a * x + b;
+            document.getElementById("quiz2-question").innerHTML = `當 $x=${x}$ 時，求 $${a}x ${b >= 0 ? "+" : "-"} ${Math.abs(b)}$ 的值。`;
+            lessonUtils.resetInputs(["q2-answer"]);
+            lessonUtils.clearFeedback("quiz2-feedback");
+            lessonUtils.refreshMath();
+        }
+        function checkQuiz2() {
+            const guess = Number(document.getElementById("q2-answer").value);
+            lessonUtils.setFeedback("quiz2-feedback", guess === quiz2Answer, guess === quiz2Answer ? "很好，代入與計算都正確。" : `再算一次乘法和加減，答案是 ${quiz2Answer}。`);
+        }
+        generateQuiz1();
+        generateQuiz2();
+    </script>
+</body>
+</html>

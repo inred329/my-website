@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-2 簡單多項式函數及其圖形</title>
+    <link rel="stylesheet" href="lesson.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="lesson-body">
+    <div class="lesson-shell">
+        <header class="lesson-hero">
+            <p class="eyebrow">第 3 章・3-2</p>
+            <h1>簡單多項式函數及其圖形</h1>
+            <p>從式子走到圖形，你會開始看到係數、次數和圖像外型之間的關係。這一步是讀懂函數的關鍵。</p>
+            <p><a href="index.html">回到首頁</a></p>
+        </header>
+        <div class="lesson-grid">
+            <main class="panel">
+                <h2>看圖形前先看什麼</h2>
+                <ul class="concept-list">
+                    <li>多項式函數的次數，會影響圖形的整體外型。</li>
+                    <li>常數項是圖形和 $y$ 軸的交點，也就是 $x=0$ 時的函數值。</li>
+                    <li>令 $y=0$ 時求出的解，就是圖形和 $x$ 軸的交點。</li>
+                </ul>
+                <div class="cards">
+                    <div class="card"><strong>一次函數</strong>圖形是直線，例如 $y=2x+1$。</div>
+                    <div class="card"><strong>二次函數</strong>圖形常見為拋物線，例如 $y=x^2-4$。</div>
+                    <div class="card"><strong>三次函數</strong>圖形可能有轉折，例如 $y=x^3-x$。</div>
+                </div>
+                <div class="example-box">
+                    <h3>例子：$y=x^2-4$</h3>
+                    <p>令 $x=0$，得到 $y=-4$，所以和 $y$ 軸交於 $(0,-4)$。</p>
+                    <p>令 $y=0$，得到 $x^2-4=0$，所以和 $x$ 軸交於 $(-2,0)$、$(2,0)$。</p>
+                </div>
+                <div class="summary-box">
+                    <h3>讀圖技巧</h3>
+                    <ul class="tip-list">
+                        <li>先找軸截距，再看整體開口方向。</li>
+                        <li>偶次多項式兩端通常同向，奇次多項式兩端通常反向。</li>
+                        <li>函數值可以用代入，圖形位置可以用點來定位。</li>
+                    </ul>
+                </div>
+            </main>
+            <aside class="panel">
+                <h2>用圖看二次函數</h2>
+                <div class="visual-frame">
+                    <svg viewBox="0 0 560 320" aria-label="拋物線示意圖">
+                        <line x1="60" y1="160" x2="500" y2="160" stroke="#334155" stroke-width="4"></line>
+                        <line x1="280" y1="30" x2="280" y2="290" stroke="#334155" stroke-width="4"></line>
+                        <path d="M120 60 Q280 300 440 60" fill="none" stroke="#2563eb" stroke-width="6"></path>
+                        <circle cx="180" cy="160" r="8" fill="#ef4444"></circle>
+                        <circle cx="380" cy="160" r="8" fill="#ef4444"></circle>
+                        <circle cx="280" cy="240" r="8" fill="#0ea5a4"></circle>
+                        <text x="180" y="148" text-anchor="middle" font-size="18">(-2,0)</text>
+                        <text x="380" y="148" text-anchor="middle" font-size="18">(2,0)</text>
+                        <text x="325" y="246" font-size="18">(0,-4)</text>
+                        <text x="402" y="58" font-size="20" fill="#1d4ed8">y=x^2-4</text>
+                    </svg>
+                    <p class="caption">圖形和 x 軸的交點來自方程式 $x^2-4=0$，和 y 軸的交點則是直接代入 $x=0$。</p>
+                </div>
+                <section class="quiz-box">
+                    <h3>互動練習 1：y 軸交點</h3>
+                    <div id="quiz1-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="q1-answer">答案</label>
+                        <input id="q1-answer" type="number">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz1()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz1()">換一題</button>
+                    </div>
+                    <div id="quiz1-feedback" class="feedback"></div>
+                </section>
+                <section class="quiz-box">
+                    <h3>互動練習 2：x 軸交點數量</h3>
+                    <div id="quiz2-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="q2-answer">共有幾個交點</label>
+                        <input id="q2-answer" type="number">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz2()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz2()">換一題</button>
+                    </div>
+                    <div id="quiz2-feedback" class="feedback"></div>
+                </section>
+            </aside>
+        </div>
+        <p class="lesson-footer">函數式子和圖形是同一件事的兩種語言，練久了就能互相翻譯。</p>
+    </div>
+    <script src="lesson.js"></script>
+    <script>
+        let answer1 = 0;
+        let answer2 = 0;
+        function generateQuiz1() {
+            const a = lessonUtils.pick([-4, -3, -2, -1, 1, 2, 3, 4]);
+            const b = lessonUtils.randomInt(-6, 6);
+            answer1 = b;
+            document.getElementById("quiz1-question").innerHTML = `函數 $y=${a}x ${b >= 0 ? "+" : "-"} ${Math.abs(b)}$ 在 $x=0$ 時的函數值是多少？`;
+            lessonUtils.resetInputs(["q1-answer"]);
+            lessonUtils.clearFeedback("quiz1-feedback");
+            lessonUtils.refreshMath();
+        }
+        function checkQuiz1() {
+            const guess = Number(document.getElementById("q1-answer").value);
+            lessonUtils.setFeedback("quiz1-feedback", guess === answer1, guess === answer1 ? "沒錯，y 軸交點就是常數項。" : `代入 x=0 就知道答案是 ${answer1}。`);
+        }
+        function generateQuiz2() {
+            const roots = lessonUtils.pick([
+                { text: "$y=(x-2)(x+1)$", value: 2 },
+                { text: "$y=(x-3)^2$", value: 1 },
+                { text: "$y=x^2+4$", value: 0 }
+            ]);
+            answer2 = roots.value;
+            document.getElementById("quiz2-question").innerHTML = `判斷函數 ${roots.text} 與 x 軸有幾個交點？`;
+            lessonUtils.resetInputs(["q2-answer"]);
+            lessonUtils.clearFeedback("quiz2-feedback");
+            lessonUtils.refreshMath();
+        }
+        function checkQuiz2() {
+            const guess = Number(document.getElementById("q2-answer").value);
+            lessonUtils.setFeedback("quiz2-feedback", guess === answer2, guess === answer2 ? "判斷正確，交點數量和方程式實數解個數一致。" : `再回頭看 y=0 時的方程式，這題共有 ${answer2} 個交點。`);
+        }
+        generateQuiz1();
+        generateQuiz2();
+    </script>
+</body>
+</html>

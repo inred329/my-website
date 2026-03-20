@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2-2 常用對數</title>
+    <link rel="stylesheet" href="lesson.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="lesson-body">
+    <div class="lesson-shell">
+        <header class="lesson-hero">
+            <p class="eyebrow">第 2 章・2-2</p>
+            <h1>常用對數</h1>
+            <p>對數可以理解成「指數的反向問題」。常用對數特別把底數固定成 10，所以很適合處理位數、科學記號和成長尺度。</p>
+            <p><a href="index.html">回到首頁</a></p>
+        </header>
+        <div class="lesson-grid">
+            <main class="panel">
+                <h2>把對數翻成問題句</h2>
+                <p>$\log 1000 = 3$ 的意思是：10 的幾次方會得到 1000？答案是 3。</p>
+                <div class="cards">
+                    <div class="card"><strong>基本值</strong>$\log 1 = 0$，$\log 10 = 1$，$\log 100 = 2$</div>
+                    <div class="card"><strong>乘法變加法</strong>$\log(ab)=\log a+\log b$</div>
+                    <div class="card"><strong>除法變減法</strong>$\log(a/b)=\log a-\log b$</div>
+                    <div class="card"><strong>次方拉下來</strong>$\log(a^n)=n\log a$</div>
+                </div>
+                <div class="example-box">
+                    <h3>例題</h3>
+                    <p>$\log 10000 = 4$，因為 $10^4 = 10000$。</p>
+                    <p>$\log(100 \times 1000)=\log100+\log1000=2+3=5$。</p>
+                    <p>若 $N = 3.2 \times 10^5$，那麼 $\log N = \log 3.2 + 5$。</p>
+                </div>
+                <div class="summary-box">
+                    <h3>學習重點</h3>
+                    <ul class="tip-list">
+                        <li>常用對數預設底數是 10。</li>
+                        <li>看到很大或很小的數，先改寫成科學記號最方便。</li>
+                        <li>對數不是把數字消掉，而是把乘除轉換成加減。</li>
+                    </ul>
+                </div>
+            </main>
+            <aside class="panel">
+                <h2>用圖看對數刻度</h2>
+                <div class="visual-frame">
+                    <svg viewBox="0 0 560 260" aria-label="對數刻度示意圖">
+                        <line x1="70" y1="170" x2="500" y2="170" stroke="#334155" stroke-width="4"></line>
+                        <g text-anchor="middle" font-size="18" fill="#0f172a">
+                            <line x1="90" y1="150" x2="90" y2="190" stroke="#334155" stroke-width="3"></line>
+                            <text x="90" y="220">1</text>
+                            <line x1="220" y1="150" x2="220" y2="190" stroke="#334155" stroke-width="3"></line>
+                            <text x="220" y="220">10</text>
+                            <line x1="350" y1="150" x2="350" y2="190" stroke="#334155" stroke-width="3"></line>
+                            <text x="350" y="220">100</text>
+                            <line x1="480" y1="150" x2="480" y2="190" stroke="#334155" stroke-width="3"></line>
+                            <text x="480" y="220">1000</text>
+                        </g>
+                        <g fill="#1d4ed8" font-size="18" text-anchor="middle">
+                            <text x="90" y="120">log = 0</text>
+                            <text x="220" y="120">log = 1</text>
+                            <text x="350" y="120">log = 2</text>
+                            <text x="480" y="120">log = 3</text>
+                        </g>
+                        <path d="M90 88 L220 88 L350 88 L480 88" stroke="#f59e0b" stroke-width="5" stroke-dasharray="12 8"></path>
+                    </svg>
+                    <p class="caption">原來數值差很多的 1、10、100、1000，在對數刻度上會變成等距。這就是為什麼對數適合描述跨很多倍的資料。</p>
+                </div>
+                <section class="quiz-box">
+                    <h3>互動練習 1：基本對數</h3>
+                    <div id="quiz1-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="q1-answer">答案</label>
+                        <input id="q1-answer" type="number">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz1()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz1()">換一題</button>
+                    </div>
+                    <div id="quiz1-feedback" class="feedback"></div>
+                </section>
+                <section class="quiz-box">
+                    <h3>互動練習 2：科學記號</h3>
+                    <div id="quiz2-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="q2-answer">填入整數部分</label>
+                        <input id="q2-answer" type="number">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz2()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz2()">換一題</button>
+                    </div>
+                    <div id="quiz2-feedback" class="feedback"></div>
+                </section>
+            </aside>
+        </div>
+        <p class="lesson-footer">把對數想成「在問 10 的幾次方」，很多觀念就會立刻清楚。</p>
+    </div>
+    <script src="lesson.js"></script>
+    <script>
+        let answer1 = 0;
+        let answer2 = 0;
+        function generateQuiz1() {
+            const n = lessonUtils.randomInt(0, 5);
+            answer1 = n;
+            document.getElementById("quiz1-question").innerHTML = `求 $\\log ${Math.pow(10, n)}$`;
+            lessonUtils.resetInputs(["q1-answer"]);
+            lessonUtils.clearFeedback("quiz1-feedback");
+            lessonUtils.refreshMath();
+        }
+        function checkQuiz1() {
+            const guess = Number(document.getElementById("q1-answer").value);
+            lessonUtils.setFeedback("quiz1-feedback", guess === answer1, guess === answer1 ? "答對了，因為底數是 10。" : `再想想 10 的幾次方會得到這個數，答案是 ${answer1}。`);
+        }
+        function generateQuiz2() {
+            answer2 = lessonUtils.randomInt(2, 7);
+            document.getElementById("quiz2-question").innerHTML = `若 $N = 4.8 \\times 10^${answer2}$，則 $\\log N = \\log 4.8 + \\underline{\\qquad}$`;
+            lessonUtils.resetInputs(["q2-answer"]);
+            lessonUtils.clearFeedback("quiz2-feedback");
+            lessonUtils.refreshMath();
+        }
+        function checkQuiz2() {
+            const guess = Number(document.getElementById("q2-answer").value);
+            lessonUtils.setFeedback("quiz2-feedback", guess === answer2, guess === answer2 ? "很好，科學記號的指數會直接留在後面。" : `答案是 ${answer2}，因為 $\\log(4.8\\times10^n)=\\log4.8+n$。`);
+            lessonUtils.refreshMath();
+        }
+        generateQuiz1();
+        generateQuiz2();
+    </script>
+</body>
+</html>

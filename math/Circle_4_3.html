@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4-3 圓與直線的關係</title>
+    <link rel="stylesheet" href="lesson.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="lesson-body">
+    <div class="lesson-shell">
+        <header class="lesson-hero">
+            <p class="eyebrow">第 4 章・4-3</p>
+            <h1>圓與直線的關係</h1>
+            <p>判斷直線和圓是相交、相切還是相離，關鍵不是硬畫，而是比較圓心到直線的距離和半徑的大小。</p>
+            <p><a href="index.html">回到首頁</a></p>
+        </header>
+        <div class="lesson-grid">
+            <main class="panel">
+                <h2>判斷三種位置關係</h2>
+                <div class="cards">
+                    <div class="card"><strong>相交</strong>圓心到直線距離 $d &lt; r$，會有兩個交點。</div>
+                    <div class="card"><strong>相切</strong>圓心到直線距離 $d = r$，會有一個交點。</div>
+                    <div class="card"><strong>相離</strong>圓心到直線距離 $d &gt; r$，沒有交點。</div>
+                </div>
+                <div class="formula-box">
+                    <h3>核心想法</h3>
+                    <p>圓的標準式：$(x-a)^2 + (y-b)^2 = r^2$。</p>
+                    <p>只要知道圓心 $(a,b)$ 和半徑 $r$，再比較圓心到直線的距離，就能判斷位置關係。</p>
+                </div>
+                <div class="example-box">
+                    <h3>例題</h3>
+                    <p>圓心到直線距離是 4，半徑是 4，代表直線剛好碰到圓，所以是相切。</p>
+                </div>
+            </main>
+            <aside class="panel">
+                <h2>用圖看距離比較</h2>
+                <div class="visual-frame">
+                    <svg viewBox="0 0 560 300" aria-label="圓與直線關係示意圖">
+                        <circle cx="220" cy="150" r="90" fill="#dbeafe" stroke="#2563eb" stroke-width="5"></circle>
+                        <line x1="380" y1="45" x2="380" y2="255" stroke="#ef4444" stroke-width="6"></line>
+                        <line x1="220" y1="150" x2="380" y2="150" stroke="#0f766e" stroke-width="5" stroke-dasharray="10 8"></line>
+                        <circle cx="220" cy="150" r="8" fill="#0f172a"></circle>
+                        <text x="200" y="138" font-size="18">圓心</text>
+                        <text x="300" y="138" font-size="18" fill="#0f766e">d</text>
+                        <text x="262" y="112" font-size="18" fill="#2563eb">r</text>
+                        <text x="390" y="34" font-size="18" fill="#ef4444">直線</text>
+                        <text x="278" y="275" text-anchor="middle" font-size="20" fill="#475569">比較 d 和 r，就能知道是交、切、還是離</text>
+                    </svg>
+                    <p class="caption">把複雜的幾何關係轉成兩個長度比較，題目就會簡潔很多。</p>
+                </div>
+                <section class="quiz-box">
+                    <h3>互動練習 1：判斷關係</h3>
+                    <div id="quiz1-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="q1-answer">填入 相交、相切、相離</label>
+                        <input id="q1-answer" type="text">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz1()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz1()">換一題</button>
+                    </div>
+                    <div id="quiz1-feedback" class="feedback"></div>
+                </section>
+                <section class="quiz-box">
+                    <h3>互動練習 2：交點個數</h3>
+                    <div id="quiz2-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="q2-answer">共有幾個交點</label>
+                        <input id="q2-answer" type="number">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz2()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz2()">換一題</button>
+                    </div>
+                    <div id="quiz2-feedback" class="feedback"></div>
+                </section>
+            </aside>
+        </div>
+        <p class="lesson-footer">圓與直線關係最重要的不是算很多，而是先抓住距離比較這個核心。</p>
+    </div>
+    <script src="lesson.js"></script>
+    <script>
+        let answer1 = "";
+        let answer2 = 0;
+        function generateQuiz1() {
+            const item = lessonUtils.pick([
+                { d: 3, r: 5, label: "相交" },
+                { d: 4, r: 4, label: "相切" },
+                { d: 7, r: 2, label: "相離" }
+            ]);
+            answer1 = item.label;
+            document.getElementById("quiz1-question").innerHTML = `圓心到直線的距離為 ${item.d}，半徑為 ${item.r}。請判斷位置關係。`;
+            lessonUtils.resetInputs(["q1-answer"]);
+            lessonUtils.clearFeedback("quiz1-feedback");
+        }
+        function checkQuiz1() {
+            const guess = document.getElementById("q1-answer").value.trim();
+            lessonUtils.setFeedback("quiz1-feedback", guess === answer1, guess === answer1 ? "答對了，關鍵就是比較 d 和 r。" : `比較距離和半徑後，答案是「${answer1}」。`);
+        }
+        function generateQuiz2() {
+            const item = lessonUtils.pick([
+                { text: "d < r", value: 2 },
+                { text: "d = r", value: 1 },
+                { text: "d > r", value: 0 }
+            ]);
+            answer2 = item.value;
+            document.getElementById("quiz2-question").innerHTML = `若圓心到直線距離與半徑滿足 ${item.text}，則共有幾個交點？`;
+            lessonUtils.resetInputs(["q2-answer"]);
+            lessonUtils.clearFeedback("quiz2-feedback");
+        }
+        function checkQuiz2() {
+            const guess = Number(document.getElementById("q2-answer").value);
+            lessonUtils.setFeedback("quiz2-feedback", guess === answer2, guess === answer2 ? "很好，你已經把三種情況分清楚了。" : `這一題有 ${answer2} 個交點。`);
+        }
+        generateQuiz1();
+        generateQuiz2();
+    </script>
+</body>
+</html>

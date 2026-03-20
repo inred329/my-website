@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1-1 數與數線</title>
+    <link rel="stylesheet" href="lesson.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="lesson-body">
+    <div class="lesson-shell">
+        <header class="lesson-hero">
+            <p class="eyebrow">第 1 章・1-1</p>
+            <h1>數與數線</h1>
+            <p>這一單元會把整數、分數、絕對值與區間觀念連在一起。先知道數字站在哪裡，再談大小、距離與範圍就會非常自然。</p>
+            <p><a href="index.html">回到首頁</a></p>
+        </header>
+        <div class="lesson-grid">
+            <main class="panel">
+                <h2>先抓住三個核心</h2>
+                <ul class="concept-list">
+                    <li>數線上的點和實數一一對應，往右越大，往左越小。</li>
+                    <li>絕對值 $|a|$ 表示數字 $a$ 到 0 的距離，所以不會是負數。</li>
+                    <li>比較大小時，可以看數線位置，也可以利用正負號與距離來判斷。</li>
+                </ul>
+                <div class="cards">
+                    <div class="card">
+                        <strong>正數與負數</strong>
+                        0 的右邊是正數，左邊是負數。像 $3$ 在右邊，$-2$ 在左邊。
+                    </div>
+                    <div class="card">
+                        <strong>相反數</strong>
+                        $a$ 與 $-a$ 到 0 的距離相同，但方向相反，例如 $4$ 和 $-4$。
+                    </div>
+                    <div class="card">
+                        <strong>區間觀念</strong>
+                        例如 $-2 \le x \le 3$，就是數線上從 $-2$ 到 $3$ 的整段範圍。
+                    </div>
+                </div>
+                <div class="formula-box">
+                    <h3>課本常用關係</h3>
+                    <p>$a > b$ 代表在數線上，$a$ 位於 $b$ 的右邊。</p>
+                    <p>$|a-b|$ 代表 $a$ 與 $b$ 在數線上的距離。</p>
+                </div>
+                <div class="example-box">
+                    <h3>例子</h3>
+                    <p>比較 $-3$ 與 $1$ 的大小：因為 $-3$ 在數線上位於 $1$ 左邊，所以 $-3 &lt; 1$。</p>
+                    <p>求 $|-5|$：它表示 $-5$ 到 0 的距離，因此答案是 $5$。</p>
+                </div>
+                <div class="summary-box">
+                    <h3>讀題提醒</h3>
+                    <ul class="tip-list">
+                        <li>看到絕對值，先翻成「距離」。</li>
+                        <li>看到不等式範圍，先想成數線上的區段。</li>
+                        <li>負數比較大小時，離 0 越近反而越大。</li>
+                    </ul>
+                </div>
+            </main>
+            <aside class="panel">
+                <h2>用圖看數線</h2>
+                <div class="visual-frame">
+                    <svg viewBox="0 0 560 260" aria-label="數線示意圖">
+                        <defs>
+                            <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"></path>
+                            </marker>
+                        </defs>
+                        <line x1="50" y1="130" x2="510" y2="130" stroke="#334155" stroke-width="4" marker-start="url(#arrow)" marker-end="url(#arrow)"></line>
+                        <g font-size="18" fill="#0f172a" text-anchor="middle">
+                            <line x1="95" y1="114" x2="95" y2="146" stroke="#334155" stroke-width="3"></line>
+                            <text x="95" y="172">-4</text>
+                            <line x1="165" y1="114" x2="165" y2="146" stroke="#334155" stroke-width="3"></line>
+                            <text x="165" y="172">-2</text>
+                            <line x1="235" y1="114" x2="235" y2="146" stroke="#334155" stroke-width="3"></line>
+                            <text x="235" y="172">0</text>
+                            <line x1="305" y1="114" x2="305" y2="146" stroke="#334155" stroke-width="3"></line>
+                            <text x="305" y="172">2</text>
+                            <line x1="375" y1="114" x2="375" y2="146" stroke="#334155" stroke-width="3"></line>
+                            <text x="375" y="172">4</text>
+                            <circle cx="130" cy="130" r="10" fill="#ef4444"></circle>
+                            <text x="130" y="100">A = -3</text>
+                            <circle cx="340" cy="130" r="10" fill="#0ea5a4"></circle>
+                            <text x="340" y="100">B = 3</text>
+                        </g>
+                        <path d="M130 82 Q235 24 340 82" fill="none" stroke="#f59e0b" stroke-width="5" stroke-dasharray="10 8"></path>
+                        <text x="235" y="48" text-anchor="middle" font-size="20" fill="#b45309">A 到 B 的距離是 6</text>
+                        <path d="M130 198 Q183 228 235 198" fill="none" stroke="#2563eb" stroke-width="4"></path>
+                        <text x="182" y="248" text-anchor="middle" font-size="18" fill="#1d4ed8">|-3| = 3</text>
+                    </svg>
+                    <p class="caption">藍色弧線表示到 0 的距離，橘色弧線表示兩點之間的距離。這就是絕對值與 $|a-b|$ 的直觀意思。</p>
+                </div>
+                <section class="quiz-box">
+                    <h3>互動練習 1：比大小</h3>
+                    <div id="quiz1-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="quiz1-answer">填入 &gt;、&lt; 或 =</label>
+                        <input id="quiz1-answer" type="text" maxlength="1">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz1()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz1()">換一題</button>
+                    </div>
+                    <div id="quiz1-feedback" class="feedback"></div>
+                </section>
+                <section class="quiz-box">
+                    <h3>互動練習 2：絕對值</h3>
+                    <div id="quiz2-question" class="quiz-question"></div>
+                    <div class="quiz-input-row">
+                        <label for="quiz2-answer">答案</label>
+                        <input id="quiz2-answer" type="number">
+                    </div>
+                    <div class="button-row">
+                        <button onclick="checkQuiz2()">檢查答案</button>
+                        <button class="secondary" onclick="generateQuiz2()">換一題</button>
+                    </div>
+                    <div id="quiz2-feedback" class="feedback"></div>
+                </section>
+            </aside>
+        </div>
+        <p class="lesson-footer">把數線看懂，後面的不等式、函數圖形都會更有方向感。</p>
+    </div>
+    <script src="lesson.js"></script>
+    <script>
+        let answer1 = "";
+        let answer2 = 0;
+        function generateQuiz1() {
+            const a = lessonUtils.randomInt(-9, 9);
+            const b = lessonUtils.randomInt(-9, 9);
+            answer1 = a > b ? ">" : (a < b ? "<" : "=");
+            document.getElementById("quiz1-question").innerHTML = `比較大小：$${a}$ ___ $${b}$`;
+            document.getElementById("quiz1-answer").value = "";
+            lessonUtils.clearFeedback("quiz1-feedback");
+            lessonUtils.refreshMath();
+        }
+        function checkQuiz1() {
+            const guess = document.getElementById("quiz1-answer").value.trim();
+            lessonUtils.setFeedback("quiz1-feedback", guess === answer1, guess === answer1 ? "答對了，位置越右邊的數越大。" : `再看一次數線位置，正確答案是 ${answer1}。`);
+        }
+        function generateQuiz2() {
+            const a = lessonUtils.randomInt(-12, 12);
+            answer2 = Math.abs(a);
+            document.getElementById("quiz2-question").innerHTML = `請計算：$|${a}|$`;
+            document.getElementById("quiz2-answer").value = "";
+            lessonUtils.clearFeedback("quiz2-feedback");
+            lessonUtils.refreshMath();
+        }
+        function checkQuiz2() {
+            const guess = Number(document.getElementById("quiz2-answer").value);
+            lessonUtils.setFeedback("quiz2-feedback", guess === answer2, guess === answer2 ? "完全正確，絕對值就是到 0 的距離。" : `再想想距離不能是負的，答案是 ${answer2}。`);
+        }
+        generateQuiz1();
+        generateQuiz2();
+    </script>
+</body>
+</html>
