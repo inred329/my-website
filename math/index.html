@@ -7,50 +7,91 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>高中數學(1) 翰林版 複習網</h1>
-        <p>（根據部定最新課程綱要）</p>
-    </header>
-    <main>
-        <h2>單元列表</h2>
-        
-        <div class="unit">
-            <h3>第1章 數與式</h3>
-            <ul>
-                <li><a href="Number_1_1.html">1-1 數與數線</a></li>
-                <li><a href="Expression_1_2.html">1-2 式的運算</a></li>
-            </ul>
-        </div>
-        
-        <div class="unit">
-            <h3>第2章 指數、對數</h3>
-            <ul>
-                <li><a href="Exponents_2_1.html">2-1 指數</a></li>
-                <li><a href="Logarithm_2_2.html">2-2 常用對數</a></li>
-            </ul>
-        </div>
+    <div class="home-shell">
+        <header class="home-hero">
+            <p class="eyebrow">Hanlin Math Review</p>
+            <h1>高中數學(1) 複習網</h1>
+            <p class="hero-text">把課本單元拆成更好讀的講解頁，搭配 SVG 圖解和互動題目，讓複習不只是在看公式，而是真的重新理解每個觀念。</p>
+            <div class="hero-tags">
+                <span>重點整理</span>
+                <span>圖像化說明</span>
+                <span>互動練習</span>
+            </div>
+        </header>
 
-        <div class="unit">
-            <h3>第3章 多項式函數</h3>
-            <ul>
-                <li><a href="Polynomial_1.html">3-1 多項式的運算與應用</a></li>
-                <li><a href="Polynomial_2.html">3-2 簡單多項式函數及其圖形</a></li>
-                <li><a href="Polynomial_3.html">3-3 多項式函數的圖形與多項式不等式</a></li>
-            </ul>
-        </div>
+        <main class="home-main">
+            <section class="intro-card">
+                <h2>使用方式</h2>
+                <p>每個單元都整理成三個部分：先講基本概念，再用圖像說明，最後用互動題確認自己是不是真的會了。建議照章節順序讀，也可以直接點自己想複習的單元。</p>
+            </section>
 
-        <div class="unit">
-            <h3>第4章 直線與圓</h3>
-            <ul>
-                <li><a href="Line_4_1.html">4-1 直線方程式及其圖形</a></li>
-                <li><a href="Line_4_2.html">4-2 直線方程式的應用</a></li>
-                <li><a href="Circle_4_3.html">4-3 圓與直線的關係</a></li>
-            </ul>
-        </div>
+            <section class="chapter-grid">
+                <article class="chapter-card">
+                    <div class="chapter-head">
+                        <p class="chapter-no">Chapter 1</p>
+                        <h2>第 1 章 數與式</h2>
+                    </div>
+                    <ul class="lesson-list">
+                        <li><a href="Number_1_1.html">1-1 數與數線</a></li>
+                        <li><a href="Expression_1_2.html">1-2 式的運算</a></li>
+                    </ul>
+                </article>
 
-    </main>
-    <footer>
-        <p>本站內容僅供複習使用</p>
-    </footer>
+                <article class="chapter-card">
+                    <div class="chapter-head">
+                        <p class="chapter-no">Chapter 2</p>
+                        <h2>第 2 章 指數、對數</h2>
+                    </div>
+                    <ul class="lesson-list">
+                        <li><a href="Exponents_2_1.html">2-1 指數</a></li>
+                        <li><a href="Logarithm_2_2.html">2-2 常用對數</a></li>
+                    </ul>
+                </article>
+
+                <article class="chapter-card featured">
+                    <div class="chapter-head">
+                        <p class="chapter-no">Chapter 3</p>
+                        <h2>第 3 章 多項式函數</h2>
+                    </div>
+                    <ul class="lesson-list">
+                        <li><a href="Polynomial_1.html">3-1 多項式的運算與應用</a></li>
+                        <li><a href="Polynomial_2.html">3-2 簡單多項式函數及其圖形</a></li>
+                        <li><a href="Polynomial_3.html">3-3 多項式函數的圖形與多項式不等式</a></li>
+                    </ul>
+                </article>
+
+                <article class="chapter-card">
+                    <div class="chapter-head">
+                        <p class="chapter-no">Chapter 4</p>
+                        <h2>第 4 章 直線與圓</h2>
+                    </div>
+                    <ul class="lesson-list">
+                        <li><a href="Line_4_1.html">4-1 直線方程式及其圖形</a></li>
+                        <li><a href="Line_4_2.html">4-2 直線方程式的應用</a></li>
+                        <li><a href="Circle_4_3.html">4-3 圓與直線的關係</a></li>
+                    </ul>
+                </article>
+            </section>
+
+            <section class="feature-row">
+                <div class="feature-card">
+                    <h3>不是只有答案</h3>
+                    <p>每頁都先把觀念拆開講，再把計算步驟整理乾淨，降低只背題型的風險。</p>
+                </div>
+                <div class="feature-card">
+                    <h3>圖像化理解</h3>
+                    <p>用 SVG 製作數線、函數圖形、符號表與幾何關係，讓抽象內容有視覺支點。</p>
+                </div>
+                <div class="feature-card">
+                    <h3>邊學邊驗證</h3>
+                    <p>每個單元最後都有互動題，可以快速確認自己是否真的掌握重點。</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="home-footer">
+            <p>本站內容依課本章節整理，提供複習與自我檢查使用。</p>
+        </footer>
+    </div>
 </body>
 </html>
